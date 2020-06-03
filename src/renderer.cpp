@@ -2,7 +2,7 @@
 #include <iostream>
 #include <string>
 
-Renderer::Renderer(const std::size screen_width, const std::size screen_height)
+Renderer::Renderer(const std::size_t screen_width, const std::size_t screen_height)
   : screen_width_(screen_width), screen_height_(screen_height) {
     if (SDL_Init(SDL_INIT_VIDEO) < 0) {
       std::cerr << "SDL could not initialize." << std::endl;
@@ -16,7 +16,7 @@ Renderer::Renderer(const std::size screen_width, const std::size screen_height)
       std::cerr << "SDL Error: " << SDL_GetError() << std::endl;
     }
     
-    renderer_ = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+    renderer_ = SDL_CreateRenderer(window_, -1, SDL_RENDERER_ACCELERATED);
     if (renderer_ == nullptr) {
       std::cerr << "Renderer could not be created." << std::endl;
       std::cerr << "SDL Error: " << SDL_GetError() << std::endl;
