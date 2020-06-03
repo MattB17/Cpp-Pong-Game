@@ -31,4 +31,5 @@ Renderer::~Renderer() {
 void Renderer::Render() {
   SDL_SetRenderDrawColor(renderer_, 0x00, 0x00, 0x00, 0xFF);
   SDL_RenderClear(renderer_);
+  SDL_RenderPresent(renderer_);
 }
