@@ -1,6 +1,7 @@
 #include "renderer.h"
 #include <iostream>
 #include <string>
+#include <stdlib.h>
 
 Renderer::Renderer(const std::size_t screen_width, const std::size_t screen_height)
   : screen_width_(screen_width), screen_height_(screen_height) {
@@ -31,7 +32,7 @@ Renderer::~Renderer() {
   SDL_Quit();
 }
 
-void Renderer::Render() {
+void Renderer::Render(Ball ball) {
   // Set draw color to black and apply to whole screen
   SDL_SetRenderDrawColor(renderer_, 0x00, 0x00, 0x00, 0xFF);
   SDL_RenderClear(renderer_);
@@ -47,6 +48,20 @@ void Renderer::Render() {
     }
   }
   
+  SDL_Rect rect = ballToRect(ball);
+  SDL_RenderFillRect(renderer_, &rect);
+  
   // update screen
   SDL_RenderPresent(renderer_);
+}
+
+SDL_Rect Renderer::ballToRect(Ball ball) {
+  SDL_Rect rect{};
+  
+  rect.x = static_cast<int>(ball.getPosition().getX());
+  rect.y = static_cast<int>(ball.getPosition().getY());
+  rect.w = ball.getWidth();
+  rect.h = ball.getHeight();
+  
+  return std::move(rect);
 }

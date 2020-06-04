@@ -2,13 +2,15 @@
 #define RENDERER_H
 
 #include "SDL.h"
+#include "ball.h"
+#include "vec2d.h"
 
 class Renderer {
   public:
     Renderer(const std::size_t screen_width, const std::size_t screen_height);
     ~Renderer();
     
-    void Render();
+    void Render(Ball ball);
   
   private:
     SDL_Window *window_;
@@ -16,6 +18,8 @@ class Renderer {
   
     const std::size_t screen_width_;
     const std::size_t screen_height_;
+    
+    SDL_Rect ballToRect(Ball ball);
 };
 
 #endif

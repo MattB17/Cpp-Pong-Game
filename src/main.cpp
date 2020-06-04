@@ -3,16 +3,15 @@
 #include "renderer.h"
 #include <iostream>
 
-const int WINDOW_WIDTH = 1280;
-const int WINDOW_HEIGHT = 720;
-
 int main() {
   constexpr std::size_t kScreenWidth{1280};
   constexpr std::size_t kScreenHeight{720};
+  constexpr int kBallWidth{15};
+  constexpr int kBallHeight{15};
   
   Renderer renderer(kScreenWidth, kScreenHeight);
   Controller controller;
-  Game game;
+  Game game(kBallWidth, kBallHeight, kScreenWidth, kScreenHeight);
   game.Run(controller, renderer);
   std::cout << "The game has terminated successfully" << std::endl;
   return 0;
