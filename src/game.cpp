@@ -7,6 +7,7 @@
 void Game::Run(Controller const &controller, Renderer &renderer) {
   bool running = true;
   while(running) {
+    // run input-update-render game loop
     controller.HandleInput(running);
     Update();
     renderer.Render();
