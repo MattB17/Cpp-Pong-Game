@@ -32,9 +32,20 @@ Renderer::~Renderer() {
 }
 
 void Renderer::Render() {
-  // Set background to black and clear screen
+  // Set draw color to black and apply to whole screen
   SDL_SetRenderDrawColor(renderer_, 0x00, 0x00, 0x00, 0xFF);
   SDL_RenderClear(renderer_);
+  
+  // set draw color to white
+  SDL_SetRenderDrawColor(renderer_, 0xFF, 0xFF, 0XFF, 0xFF);
+  
+  // loop from top to bottom of the screen
+  // draw a white point in the center of the screen, skipping every third position
+  for (int y = 0; y < screen_height_; ++y) {
+    if (y % 3 != 0) {
+      SDL_RenderDrawPoint(renderer_, screen_width_ / 2, y);
+    }
+  }
   
   // update screen
   SDL_RenderPresent(renderer_);
