@@ -20,8 +20,8 @@ void Ball::setHeight(int height) {
 }
 
 Ball::Ball(Vec2D position, int width, int height) : pos_(position) {
-  Ball::setWidth(width);
-  Ball::setHeight(height);
+  setWidth(width);
+  setHeight(height);
 }
 
 Ball::Ball() : width_(1), height_(1) {

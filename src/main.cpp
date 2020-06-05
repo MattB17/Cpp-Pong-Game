@@ -9,9 +9,9 @@ int main() {
   constexpr int kBallWidth{15};
   constexpr int kBallHeight{15};
   
-  Renderer renderer(kScreenWidth, kScreenHeight);
+  Renderer renderer;
   Controller controller;
-  Game game(kBallWidth, kBallHeight, kScreenWidth, kScreenHeight);
+  Game game;
   game.Run(controller, renderer);
   std::cout << "The game has terminated successfully" << std::endl;
   return 0;

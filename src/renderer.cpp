@@ -1,10 +1,11 @@
 #include "renderer.h"
+#include "constants.h"
 #include <iostream>
 #include <string>
 #include <stdlib.h>
 
-Renderer::Renderer(const std::size_t screen_width, const std::size_t screen_height)
-  : screen_width_(screen_width), screen_height_(screen_height) {
+Renderer::Renderer()
+  : screen_width_(kScreenWidth), screen_height_(kScreenHeight) {
     // Initialize SDL
     if (SDL_Init(SDL_INIT_VIDEO) < 0) {
       std::cerr << "SDL could not initialize." << std::endl;
@@ -13,7 +14,7 @@ Renderer::Renderer(const std::size_t screen_width, const std::size_t screen_heig
     
     // Create SDL Window
     window_ = SDL_CreateWindow("Pong", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-                              screen_width, screen_height, SDL_WINDOW_SHOWN);
+                              screen_width_, screen_height_, SDL_WINDOW_SHOWN);
     if (window_ == nullptr) {
       std::cerr << "Window could not be created." << std::endl;
       std::cerr << "SDL Error: " << SDL_GetError() << std::endl;
@@ -48,20 +49,20 @@ void Renderer::Render(Ball ball) {
     }
   }
   
-  SDL_Rect rect = ballToRect(ball);
-  SDL_RenderFillRect(renderer_, &rect);
+  // draw the ball
+  drawBall(std::move(ball));
   
   // update screen
   SDL_RenderPresent(renderer_);
 }
 
-SDL_Rect Renderer::ballToRect(Ball ball) {
+SDL_Rect Renderer::drawBall(Ball ball) {
   SDL_Rect rect{};
   
   rect.x = static_cast<int>(ball.getPosition().getX());
   rect.y = static_cast<int>(ball.getPosition().getY());
   rect.w = ball.getWidth();
   rect.h = ball.getHeight();
-  
-  return std::move(rect);
+
+  SDL_RenderFillRect(renderer_, &rect);
 }

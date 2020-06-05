@@ -9,8 +9,7 @@
 
 class Game {
   public:
-    Game(int ballWidth, int ballHeight,
-         std::size_t screenWidth, std::size_t screenHeight);
+    Game();
     void Run(Controller const &controller, Renderer &renderer);
   
   private:

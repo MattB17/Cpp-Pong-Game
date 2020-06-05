@@ -7,7 +7,7 @@
 
 class Renderer {
   public:
-    Renderer(const std::size_t screen_width, const std::size_t screen_height);
+    Renderer();
     ~Renderer();
     
     void Render(Ball ball);
@@ -19,7 +19,7 @@ class Renderer {
     const std::size_t screen_width_;
     const std::size_t screen_height_;
     
-    SDL_Rect ballToRect(Ball ball);
+    SDL_Rect drawBall(Ball ball);
 };
 
 #endif
