@@ -23,7 +23,7 @@ void Paddle::setHeight(int height) {
   }
 }
 
-Paddle::Padlle(Vec2D position, int width, int height) : pos_(position) {
+Paddle::Paddle(Vec2D position, int width, int height) : pos_(position) {
   setWidth(width);
   setHeight(height);
 }

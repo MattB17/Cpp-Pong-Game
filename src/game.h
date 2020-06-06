@@ -4,8 +4,10 @@
 #include "SDL.h"
 #include "vec2d.h"
 #include "ball.h"
+#include "paddle.h"
 #include "controller.h"
 #include "renderer.h"
+#include <vector>
 
 class Game {
   public:
@@ -14,6 +16,7 @@ class Game {
   
   private:
     Ball ball_;
+    std::vector<Paddle> paddles_;
   
     void Update();
 };

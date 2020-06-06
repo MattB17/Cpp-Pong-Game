@@ -16,6 +16,15 @@ In fulfillment of this requirement, this repo implements a pong game. The initia
 * SDL2 >= 2.0
   * All installation instructions can be found [here](https://wiki.libsdl.org/Installation)
   * Note that for Linux, an `apt` or `apt-get` installation is preferred to building from source.
+* SDL2_ttf >= 2.0
+  * All installation instructions can be found [here](https://www.libsdl.org/projects/SDL_ttf/)
+  * Note that for Linux an `apt` or `apt-get` installation is preferred to building from source:
+    * `sudo apt-get -y install libsdl2-ttf-dev`
+* DejaVu-TTF >= 2.37
+  * All installation instructions can be found [here](https://sourceforge.net/projects/dejavu/files/dejavu/2.37/)
+  * Note that for Linux an `apt` or `apt-get` installation is preferred to building from source:
+    * `sudo apt-get -y install fonts-dejavu and fonts-dejavu-core`
+  * Install the ttf file in a `fonts` folder in the root project directory
 * gcc/g++ >= 5.4
   * Linux: gcc / g++ is installed by default on most Linux distros
   * Mac: same deal as make - [install Xcode command line tools](https://developer.apple.com/xcode/features/)

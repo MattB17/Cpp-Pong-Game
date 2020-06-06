@@ -2,24 +2,29 @@
 #define RENDERER_H
 
 #include "SDL.h"
+#include "SDL_ttf.h"
 #include "ball.h"
 #include "vec2d.h"
+#include "paddle.h"
+#include <vector>
 
 class Renderer {
   public:
     Renderer();
     ~Renderer();
     
-    void Render(Ball ball);
+    void Render(Ball ball, std::vector<Paddle> paddles);
   
   private:
     SDL_Window *window_;
     SDL_Renderer *renderer_;
+    TTF_Font *scoreFont_;
   
     const std::size_t screen_width_;
     const std::size_t screen_height_;
     
-    SDL_Rect drawBall(Ball ball);
+    void drawBall(Ball ball);
+    void drawPaddle(Paddle paddle);
 };
 
 #endif
