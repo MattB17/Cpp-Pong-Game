@@ -4,12 +4,12 @@
 class Vec2D {
   public:
     Vec2D() : x_(0.0f), y_(0.0f) {}
-    Vec2D(float x, float y);
+    Vec2D(float x, float y) : x_(x), y_(y) {}
     
-    float getX() const { return x_; }
-    void setX(float x);
-    float getY() const { return y_; }
-    void setY(float y);
+    float GetX() const { return x_; }
+    void SetX(float x) { x_ = x; }
+    float GetY() const { return y_; }
+    void SetY(float y) { y_ = y; }
   
     Vec2D operator+(Vec2D const &other);
     Vec2D& operator+=(Vec2D const &other);

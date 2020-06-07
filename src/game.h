@@ -16,7 +16,7 @@ class Game {
     Ball ball_;
     std::vector<Player> players_;
   
-    void Update();
+    void Update(float elapsedTime);
 };
 
 #endif

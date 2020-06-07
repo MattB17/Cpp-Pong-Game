@@ -1,7 +1,7 @@
 #include "ball.h"
 #include <iostream>
 
-void Ball::setWidth(int width) {
+void Ball::SetWidth(int width) {
   try {
     if (width <= 0) throw width;
     width_ = width;
@@ -10,7 +10,7 @@ void Ball::setWidth(int width) {
   }
 }
 
-void Ball::setHeight(int height) {
+void Ball::SetHeight(int height) {
   try {
     if (height <= 0) throw height;
     height_ = height;
@@ -20,8 +20,8 @@ void Ball::setHeight(int height) {
 }
 
 Ball::Ball(Vec2D position, int width, int height) : pos_(position) {
-  setWidth(width);
-  setHeight(height);
+  SetWidth(width);
+  SetHeight(height);
 }
 
 Ball::Ball() : width_(1), height_(1) {

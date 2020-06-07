@@ -9,13 +9,15 @@ class Player {
   public:
     Player(std::string name, Paddle paddle, Vec2D scoreDisplayPos);
   
-    std::string getName() { return name_; }
-    Paddle getPaddle() { return paddle_; }
-    Vec2D getScoreDisplayPos() { return scoreDisplayPos_; }
-    int getScore() { return score_; }
+    std::string GetName() { return name_; }
+    Paddle GetPaddle() { return paddle_; }
+    Vec2D GetScoreDisplayPos() { return scoreDisplayPos_; }
+    int GetScore() { return score_; }
     
-    void incrementScore() { ++score_; }
-    std::string getScoreString() { return std::to_string(score_); }
+    void UpdatePaddlePosition(float elapsedTime);
+    void UpdatePaddleVelocityY(float y);
+    void IncrementScore() { ++score_; }
+    std::string GetScoreString() { return std::to_string(score_); }
     
   private:
     std::string name_;

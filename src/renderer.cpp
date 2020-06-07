@@ -66,44 +66,44 @@ void Renderer::Render(Ball ball, std::vector<Player> const &players) {
   }
   
   // draw the ball
-  drawBall(std::move(ball));
+  DrawBall(std::move(ball));
   
   // render the players
   for (auto player : players) {
-    renderPlayer(player);
+    RenderPlayer(player);
   }
   
   // update screen
   SDL_RenderPresent(renderer_);
 }
 
-void Renderer::drawBall(Ball ball) {
+void Renderer::DrawBall(Ball ball) {
   SDL_Rect rect{};
   
-  rect.x = static_cast<int>(ball.getPosition().getX());
-  rect.y = static_cast<int>(ball.getPosition().getY());
-  rect.w = ball.getWidth();
-  rect.h = ball.getHeight();
+  rect.x = static_cast<int>(ball.GetPosition().GetX());
+  rect.y = static_cast<int>(ball.GetPosition().GetY());
+  rect.w = ball.GetWidth();
+  rect.h = ball.GetHeight();
 
   SDL_RenderFillRect(renderer_, &rect);
 }
 
-void Renderer::drawPaddle(Paddle paddle) {
+void Renderer::DrawPaddle(Paddle paddle) {
   SDL_Rect rect{};
   
-  rect.x = static_cast<int>(paddle.getPosition().getX());
-  rect.y = static_cast<int>(paddle.getPosition().getY());
-  rect.w = paddle.getWidth();
-  rect.h = paddle.getHeight();
+  rect.x = static_cast<int>(paddle.GetPosition().GetX());
+  rect.y = static_cast<int>(paddle.GetPosition().GetY());
+  rect.w = paddle.GetWidth();
+  rect.h = paddle.GetHeight();
   
   SDL_RenderFillRect(renderer_, &rect);
 }
 
-void Renderer::renderPlayer(Player player) {
-  drawPaddle(player.getPaddle());
+void Renderer::RenderPlayer(Player &player) {
+  DrawPaddle(player.GetPaddle());
   
   surface_ = TTF_RenderText_Solid(scoreFont_, 
-                                  player.getScoreString().c_str(), 
+                                  player.GetScoreString().c_str(), 
                                   {0xFF, 0xFF, 0xFF, 0xFF});
   texture_ = SDL_CreateTextureFromSurface(renderer_, surface_);
   
@@ -112,8 +112,8 @@ void Renderer::renderPlayer(Player player) {
   
   SDL_Rect rect{};
   
-  rect.x = static_cast<int>(player.getScoreDisplayPos().getX());
-  rect.y = static_cast<int>(player.getScoreDisplayPos().getY());
+  rect.x = static_cast<int>(player.GetScoreDisplayPos().GetX());
+  rect.y = static_cast<int>(player.GetScoreDisplayPos().GetY());
   rect.w = width;
   rect.h = height;
   

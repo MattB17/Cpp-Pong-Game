@@ -9,12 +9,12 @@ class Ball {
     Ball(Vec2D position) : pos_(position), width_(1), height_(1) {}
     Ball(Vec2D position, int width, int height);
     
-    Vec2D getPosition() { return pos_; }
-    void setPosition(Vec2D position) { pos_ = position; }
-    int getWidth() { return width_; }
-    void setWidth(int width);
-    int getHeight() { return height_; }
-    void setHeight(int height);
+    Vec2D GetPosition() { return pos_; }
+    void SetPosition(Vec2D position) { pos_ = position; }
+    int GetWidth() { return width_; }
+    void SetWidth(int width);
+    int GetHeight() { return height_; }
+    void SetHeight(int height);
   
   private:
     Vec2D pos_;

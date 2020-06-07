@@ -5,18 +5,23 @@
 
 class Paddle {
   public:
-    Paddle(Vec2D position) : pos_(position), width_(1), height_(1) {}
-    Paddle(Vec2D position, int width, int height);
+    enum class Direction { kUp, kDown };
   
-    Vec2D getPosition() { return pos_; }
-    void setYPosition(float y);
-    int getWidth() { return width_; }
-    void setWidth(int width);
-    int getHeight() { return height_; }
-    void setHeight(int height);
+    Paddle(Vec2D position, Vec2D velocity);
+    Paddle(Vec2D position, Vec2D velocity, int width, int height);
+  
+    Vec2D GetPosition() { return pos_; }
+    void UpdatePosition(float elapsedTime);
+    Vec2D GetVelocity() { return velocity_; }
+    void UpdateVelocityY(float y); 
+    int GetWidth() { return width_; }
+    void SetWidth(int width);
+    int GetHeight() { return height_; }
+    void SetHeight(int height);
   
   private:
     Vec2D pos_;
+    Vec2D velocity_;
     int width_;
     int height_;
 };
