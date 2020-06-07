@@ -6,11 +6,11 @@
 class Ball {
   public:
     Ball();
-    Ball(Vec2D position) : pos_(position), width_(1), height_(1) {}
-    Ball(Vec2D position, int width, int height);
+    Ball(Vec2D position, Vec2D velocity);
+    Ball(Vec2D position, Vec2D velocity, int width, int height);
     
     Vec2D GetPosition() { return pos_; }
-    void SetPosition(Vec2D position) { pos_ = position; }
+    void UpdatePosition(float elapsedTime);
     int GetWidth() { return width_; }
     void SetWidth(int width);
     int GetHeight() { return height_; }
@@ -18,6 +18,7 @@ class Ball {
   
   private:
     Vec2D pos_;
+    Vec2D velocity_;
     int width_;
     int height_;
 };

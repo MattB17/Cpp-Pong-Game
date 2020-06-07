@@ -14,7 +14,10 @@ Game::Game() {
                            (kScreenHeight - kBallHeight) / 2.0f);
   
   // initialize ball and transfer ownership of initialPos
-  ball_ = Ball(std::move(initialPos), kBallWidth, kBallHeight);
+  ball_ = Ball(std::move(initialPos),
+               Vec2D(kBallSpeed, 0.5 * kBallSpeed), 
+               kBallWidth, 
+               kBallHeight);
   
   // create players
   Paddle p1(Vec2D(50.0f, (kScreenHeight - kPaddleHeight) / 2.0f),
@@ -51,6 +54,10 @@ void Game::Run(Controller const &controller, Renderer &renderer) {
 }
 
 void Game::Update(float elapsedTime) {
+  // update ball position
+  ball_.UpdatePosition(elapsedTime);
+  
+  // update position of paddles
   for (auto &player : players_) {
     player.UpdatePaddlePosition(elapsedTime);
   }
