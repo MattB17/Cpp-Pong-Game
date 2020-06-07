@@ -6,7 +6,7 @@
 #include "ball.h"
 #include "vec2d.h"
 #include "paddle.h"
-#include "score.h"
+#include "player.h"
 #include <vector>
 
 class Renderer {
@@ -14,7 +14,7 @@ class Renderer {
     Renderer();
     ~Renderer();
     
-    void Render(Ball ball, std::vector<Paddle> paddles, std::vector<Score> scores);
+    void Render(Ball ball, std::vector<Player> const &players);
   
   private:
     SDL_Window *window_;
@@ -28,7 +28,8 @@ class Renderer {
     
     void drawBall(Ball ball);
     void drawPaddle(Paddle paddle);
-    void drawScore(Score score);
+    
+    void renderPlayer(Player player);
 };
 
 #endif

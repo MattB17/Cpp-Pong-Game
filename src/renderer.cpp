@@ -49,7 +49,7 @@ Renderer::~Renderer() {
   SDL_Quit();
 }
 
-void Renderer::Render(Ball ball, std::vector<Paddle> paddles, std::vector<Score> scores) {
+void Renderer::Render(Ball ball, std::vector<Player> const &players) {
   // Set draw color to black and apply to whole screen
   SDL_SetRenderDrawColor(renderer_, 0x00, 0x00, 0x00, 0xFF);
   SDL_RenderClear(renderer_);
@@ -68,14 +68,9 @@ void Renderer::Render(Ball ball, std::vector<Paddle> paddles, std::vector<Score>
   // draw the ball
   drawBall(std::move(ball));
   
-  // draw the paddles
-  for (auto paddle : paddles) {
-    drawPaddle(std::move(paddle));
-  }
-  
-  // draw the scores
-  for (auto score : scores) {
-    drawScore(std::move(score));
+  // render the players
+  for (auto player : players) {
+    renderPlayer(player);
   }
   
   // update screen
@@ -104,9 +99,11 @@ void Renderer::drawPaddle(Paddle paddle) {
   SDL_RenderFillRect(renderer_, &rect);
 }
 
-void Renderer::drawScore(Score score) {
+void Renderer::renderPlayer(Player player) {
+  drawPaddle(player.getPaddle());
+  
   surface_ = TTF_RenderText_Solid(scoreFont_, 
-                                  score.getScoreString().c_str(), 
+                                  player.getScoreString().c_str(), 
                                   {0xFF, 0xFF, 0xFF, 0xFF});
   texture_ = SDL_CreateTextureFromSurface(renderer_, surface_);
   
@@ -115,8 +112,8 @@ void Renderer::drawScore(Score score) {
   
   SDL_Rect rect{};
   
-  rect.x = static_cast<int>(score.getDisplayPosition().getX());
-  rect.y = static_cast<int>(score.getDisplayPosition().getY());
+  rect.x = static_cast<int>(player.getScoreDisplayPos().getX());
+  rect.y = static_cast<int>(player.getScoreDisplayPos().getY());
   rect.w = width;
   rect.h = height;
   

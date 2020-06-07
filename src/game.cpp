@@ -1,5 +1,6 @@
 #include "game.h"
-#include "SDL.h"
+#include "paddle.h"
+#include "vec2d.h"
 #include "constants.h"
 #include <iostream>
 #include <chrono>
@@ -14,23 +15,18 @@ Game::Game() {
   // initialize ball and transfer ownership of initialPos
   ball_ = Ball(std::move(initialPos), kBallWidth, kBallHeight);
   
-  // create two paddles
+  // create players
   Paddle p1(Vec2D(50.0f, (kScreenHeight - kPaddleHeight) / 2.0f),
             kPaddleWidth, kPaddleHeight);
-  Paddle p2(Vec2D(kScreenWidth - 50.0f, (kScreenHeight - kPaddleHeight) / 2.0f),
+  Vec2D scorePos1 = Vec2D(kScreenWidth / 4, 20);
+  players_.emplace_back(
+    Player("Player1", std::move(p1), std::move(scorePos1)));
+  
+  Paddle p2(Vec2D(kScreenWidth - 50.0f, 
+                 (kScreenHeight - kPaddleHeight) / 2.0f),
             kPaddleWidth, kPaddleHeight);
-  
-  // use move semantics to move the paddles into the vector
-  paddles_.push_back(std::move(p1));
-  paddles_.push_back(std::move(p2));
-  
-  // create two scores
-  Score s1(Vec2D(kScreenWidth / 4, 20));
-  Score s2(Vec2D(3 * kScreenWidth / 4, 20));
-  
-  // use move semantics to move the scores into the vector
-  scores_.push_back(std::move(s1));
-  scores_.push_back(std::move(s2));
+  Vec2D scorePos2 = Vec2D(3 * kScreenWidth / 4, 20);
+  players_.emplace_back(Player("Player2", std::move(p2), std::move(scorePos2)));
 }
 
 void Game::Run(Controller const &controller, Renderer &renderer) {
@@ -39,7 +35,7 @@ void Game::Run(Controller const &controller, Renderer &renderer) {
     // run input-update-render game loop
     controller.HandleInput(running);
     Update();
-    renderer.Render(ball_, paddles_, scores_);
+    renderer.Render(ball_, players_);
     
     std::this_thread::sleep_for(std::chrono::milliseconds(5000));
   }
