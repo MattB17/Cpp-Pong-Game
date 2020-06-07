@@ -33,7 +33,7 @@ Renderer::Renderer()
     }
       
    // load TTF font
-   scoreFont_ = TTF_OpenFont("../fonts/DejaVuSansMono.ttf", 40);
+   scoreFont_ = TTF_OpenFont("../fonts/DejaVuSansMono.ttf", 32);
    if (scoreFont_ == nullptr) {
      std::cerr << "Font could not be loaded." << std::endl;
      std::cerr << "TTF Error: " << TTF_GetError() << std::endl;
@@ -42,12 +42,14 @@ Renderer::Renderer()
 
 Renderer::~Renderer() {
   SDL_DestroyWindow(window_);
+  SDL_FreeSurface(surface_);
+  SDL_DestroyTexture(texture_);
   TTF_CloseFont(scoreFont_);
   TTF_Quit();
   SDL_Quit();
 }
 
-void Renderer::Render(Ball ball, std::vector<Paddle> paddles) {
+void Renderer::Render(Ball ball, std::vector<Paddle> paddles, std::vector<Score> scores) {
   // Set draw color to black and apply to whole screen
   SDL_SetRenderDrawColor(renderer_, 0x00, 0x00, 0x00, 0xFF);
   SDL_RenderClear(renderer_);
@@ -69,6 +71,11 @@ void Renderer::Render(Ball ball, std::vector<Paddle> paddles) {
   // draw the paddles
   for (auto paddle : paddles) {
     drawPaddle(std::move(paddle));
+  }
+  
+  // draw the scores
+  for (auto score : scores) {
+    drawScore(std::move(score));
   }
   
   // update screen
@@ -95,4 +102,23 @@ void Renderer::drawPaddle(Paddle paddle) {
   rect.h = paddle.getHeight();
   
   SDL_RenderFillRect(renderer_, &rect);
+}
+
+void Renderer::drawScore(Score score) {
+  surface_ = TTF_RenderText_Solid(scoreFont_, 
+                                  score.getScoreString().c_str(), 
+                                  {0xFF, 0xFF, 0xFF, 0xFF});
+  texture_ = SDL_CreateTextureFromSurface(renderer_, surface_);
+  
+  int width, height;
+  SDL_QueryTexture(texture_, nullptr, nullptr, &width, &height);
+  
+  SDL_Rect rect{};
+  
+  rect.x = static_cast<int>(score.getDisplayPosition().getX());
+  rect.y = static_cast<int>(score.getDisplayPosition().getY());
+  rect.w = width;
+  rect.h = height;
+  
+  SDL_RenderCopy(renderer_, texture_, nullptr, &rect);
 }

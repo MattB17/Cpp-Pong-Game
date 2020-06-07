@@ -5,6 +5,7 @@
 #include "vec2d.h"
 #include "ball.h"
 #include "paddle.h"
+#include "score.h"
 #include "controller.h"
 #include "renderer.h"
 #include <vector>
@@ -17,6 +18,7 @@ class Game {
   private:
     Ball ball_;
     std::vector<Paddle> paddles_;
+    std::vector<Score> scores_;
   
     void Update();
 };

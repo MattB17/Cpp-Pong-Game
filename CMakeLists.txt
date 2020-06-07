@@ -11,6 +11,6 @@ find_package(SDL2 REQUIRED)
 find_package(SDL2TTF REQUIRED)
 include_directories(${SDL2_INCLUDE_DIRS} ${SDL2TTF_INCLUDE_DIR} src)
 
-add_executable(PongGame src/main.cpp src/game.cpp src/controller.cpp src/renderer.cpp src/vec2d.cpp src/ball.cpp src/paddle.cpp)
+add_executable(PongGame src/main.cpp src/game.cpp src/controller.cpp src/renderer.cpp src/vec2d.cpp src/ball.cpp src/paddle.cpp src/score.cpp)
 string(STRIP ${SDL2_LIBRARIES} SDL2_LIBRARIES)
 target_link_libraries(PongGame ${SDL2_LIBRARIES} ${SDL2TTF_LIBRARY})
