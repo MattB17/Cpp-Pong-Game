@@ -12,16 +12,27 @@ void Controller::HandleInput(bool &running, std::vector<Player> &players) const 
     } else if (event.type == SDL_KEYDOWN) {
       switch(event.key.keysym.sym) {
         case SDLK_UP:
-          ChangePaddleDirection(players.at(0), Paddle::Direction::kUp);
-          break;
-        case SDLK_DOWN:
-          ChangePaddleDirection(players.at(0), Paddle::Direction::kDown);
-          break;
-        case SDLK_w:
           ChangePaddleDirection(players.at(1), Paddle::Direction::kUp);
           break;
-        case SDLK_s:
+        case SDLK_DOWN:
           ChangePaddleDirection(players.at(1), Paddle::Direction::kDown);
+          break;
+        case SDLK_w:
+          ChangePaddleDirection(players.at(0), Paddle::Direction::kUp);
+          break;
+        case SDLK_s:
+          ChangePaddleDirection(players.at(0), Paddle::Direction::kDown);
+          break;
+      }
+    } else if (event.type == SDL_KEYUP) {
+      switch(event.key.keysym.sym) {
+        case SDLK_UP:
+        case SDLK_DOWN:
+          ChangePaddleDirection(players.at(1), Paddle::Direction::kNone);
+          break;
+        case SDLK_w:
+        case SDLK_s:
+          ChangePaddleDirection(players.at(0), Paddle::Direction::kNone);
           break;
       }
     }
@@ -34,6 +45,6 @@ void Controller::ChangePaddleDirection(Player &player, Paddle::Direction input) 
   } else if (input == Paddle::Direction::kDown) {
     player.UpdatePaddleVelocityY(kPaddleSpeed);
   } else {
-    player.UpdatePaddleVelocityY(kPaddleSpeed);
+    player.UpdatePaddleVelocityY(0.0f);
   }
 }

@@ -5,7 +5,7 @@
 
 class Paddle {
   public:
-    enum class Direction { kUp, kDown };
+    enum class Direction { kUp, kDown, kNone };
   
     Paddle(Vec2D position, Vec2D velocity);
     Paddle(Vec2D position, Vec2D velocity, int width, int height);
