@@ -79,6 +79,13 @@ void Game::Update(float elapsedTime) {
     contact = GetBallWallContact();
     if (contact.collisionType != CollisionType::kNone) {
       ball_.HandleWallCollision(contact);
+      
+      // increment appropriate player's score depending on collision type
+      if (contact.collisionType == CollisionType::kLeft) {
+        players_.at(1).IncrementScore();
+      } else if (contact.collisionType == CollisionType::kRight) {
+        players_.at(0).IncrementScore();
+      }
     }
   }
 }
