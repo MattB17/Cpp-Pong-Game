@@ -1,4 +1,5 @@
 #include "ball.h"
+#include "constants.h"
 #include <iostream>
 
 void Ball::SetWidth(int width) {
@@ -23,8 +24,17 @@ void Ball::UpdatePosition(float elapsedTime) {
   pos_ += velocity_ * elapsedTime;
 }
 
-void Ball::NegateVelocity() {
+void Ball::HandleObjectCollision(Contact const &contact) {
+  // move the ball to the edge of the object and reverse x direction
+  pos_.SetX(pos_.GetX() + contact.penetration);
   velocity_.SetX(-velocity_.GetX());
+  
+  // change y direction if object hits top or bottom of object
+  if (contact.collisionType == CollisionType::kTop) {
+    velocity_.SetY(-0.75f * kBallSpeed);
+  } else if (contact.collisionType == CollisionType::kBottom) {
+    velocity_.SetY(0.75f * kBallSpeed);
+  }
 }
 
 Ball::Ball(Vec2D position, Vec2D velocity, int width, int height) 

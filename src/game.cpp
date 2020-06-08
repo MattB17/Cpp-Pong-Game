@@ -64,14 +64,20 @@ void Game::Update(float elapsedTime) {
   // update ball position
   ball_.UpdatePosition(elapsedTime);
   
-  if (std::any_of(players_.begin(), 
-                  players_.end(), 
-                  [&] (Player player) { return BallHitPaddle(player.GetPaddle()); })) {
-    ball_.NegateVelocity();
+  // check for collision with a paddle
+  Contact contact{};
+  for (auto player : players_) {
+    contact = BallHitPaddle(player.GetPaddle());
+    if (contact.collisionType != CollisionType::kNone) {
+      ball_.HandleObjectCollision(contact);
+      break;
+    }
   }
 }
 
-bool Game::BallHitPaddle(Paddle paddle) {
+Contact Game::BallHitPaddle(Paddle paddle) {
+  Contact contact{};
+  
   float ballLeft = ball_.GetPosition().GetX();
   float ballRight = ballLeft + ball_.GetWidth();
   
@@ -80,7 +86,7 @@ bool Game::BallHitPaddle(Paddle paddle) {
   
   // if they don't overlap on the x axis return false
   if ((ballRight < paddleLeft) || (ballLeft > paddleRight)) {
-    return false;
+    return contact;
   }
   
   float ballTop = ball_.GetPosition().GetY();
@@ -91,9 +97,32 @@ bool Game::BallHitPaddle(Paddle paddle) {
   
   // if they don't overlap on the y axis return false
   if ((ballBottom < paddleTop) || (ballTop > paddleBottom)) {
-    return false;
+    return contact;
   }
   
   // otherwise, they collide on both axes
-  return true;
+  
+  // set level of penetration
+  if (ball_.GetVelocity().GetX() < 0) {
+    // hit object from the right
+    contact.penetration = paddleRight - ballLeft;
+  } else if (ball_.GetVelocity().GetX() > 0) {
+    // hit object from the left
+    contact.penetration = paddleLeft - ballRight;
+  }
+  
+  // the top is denoted as the top 1/3rd, and the bottom is the bottom 1/3rd
+  float paddleRangeUpper = paddleBottom - (2.0f * paddle.GetHeight() / 3.0f);
+  float paddleRangeMiddle = paddleBottom - (paddle.GetHeight() / 3.0f);
+  
+  // determine whether ball hit paddle at top, middle, or bottom
+  if ((ballBottom >= paddleTop) && (ballBottom < paddleRangeUpper)) {
+    contact.collisionType = CollisionType::kTop;
+  } else if ((ballBottom >= paddleRangeUpper) && (ballBottom < paddleRangeMiddle)) {
+    contact.collisionType = CollisionType::kMiddle;
+  } else {
+    contact.collisionType = CollisionType::kBottom;
+  }
+  
+  return contact;
 }

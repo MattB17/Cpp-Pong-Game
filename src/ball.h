@@ -2,6 +2,7 @@
 #define BALL_H
 
 #include "vec2d.h"
+#include "contact.h"
 
 class Ball {
   public:
@@ -11,12 +12,13 @@ class Ball {
     
     Vec2D GetPosition() { return pos_; }
     void UpdatePosition(float elapsedTime);
+    Vec2D GetVelocity() { return velocity_; }
     int GetWidth() { return width_; }
     void SetWidth(int width);
     int GetHeight() { return height_; }
     void SetHeight(int height);
   
-    void NegateVelocity();
+    void HandleObjectCollision(Contact const &contact);
   
   private:
     Vec2D pos_;
