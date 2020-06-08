@@ -7,6 +7,7 @@
 #include <thread>
 #include <stdlib.h>
 #include <chrono>
+#include <algorithm>
 
 Game::Game() {
   // initial position of ball
@@ -15,7 +16,7 @@ Game::Game() {
   
   // initialize ball and transfer ownership of initialPos
   ball_ = Ball(std::move(initialPos),
-               Vec2D(kBallSpeed, 0.5 * kBallSpeed), 
+               Vec2D(kBallSpeed, 0.0f), 
                kBallWidth, 
                kBallHeight);
   
@@ -54,11 +55,45 @@ void Game::Run(Controller const &controller, Renderer &renderer) {
 }
 
 void Game::Update(float elapsedTime) {
-  // update ball position
-  ball_.UpdatePosition(elapsedTime);
   
   // update position of paddles
   for (auto &player : players_) {
     player.UpdatePaddlePosition(elapsedTime);
   }
+  
+  // update ball position
+  ball_.UpdatePosition(elapsedTime);
+  
+  if (std::any_of(players_.begin(), 
+                  players_.end(), 
+                  [&] (Player player) { return BallHitPaddle(player.GetPaddle()); })) {
+    ball_.NegateVelocity();
+  }
+}
+
+bool Game::BallHitPaddle(Paddle paddle) {
+  float ballLeft = ball_.GetPosition().GetX();
+  float ballRight = ballLeft + ball_.GetWidth();
+  
+  float paddleLeft = paddle.GetPosition().GetX();
+  float paddleRight = paddleLeft + paddle.GetWidth();
+  
+  // if they don't overlap on the x axis return false
+  if ((ballRight < paddleLeft) || (ballLeft > paddleRight)) {
+    return false;
+  }
+  
+  float ballTop = ball_.GetPosition().GetY();
+  float ballBottom = ballTop + ball_.GetHeight();
+  
+  float paddleTop = paddle.GetPosition().GetY();
+  float paddleBottom = paddleTop + paddle.GetHeight();
+  
+  // if they don't overlap on the y axis return false
+  if ((ballBottom < paddleTop) || (ballTop > paddleBottom)) {
+    return false;
+  }
+  
+  // otherwise, they collide on both axes
+  return true;
 }

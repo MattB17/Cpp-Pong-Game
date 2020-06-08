@@ -16,6 +16,8 @@ class Ball {
     int GetHeight() { return height_; }
     void SetHeight(int height);
   
+    void NegateVelocity();
+  
   private:
     Vec2D pos_;
     Vec2D velocity_;

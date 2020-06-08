@@ -23,6 +23,10 @@ void Ball::UpdatePosition(float elapsedTime) {
   pos_ += velocity_ * elapsedTime;
 }
 
+void Ball::NegateVelocity() {
+  velocity_.SetX(-velocity_.GetX());
+}
+
 Ball::Ball(Vec2D position, Vec2D velocity, int width, int height) 
   : pos_(position), velocity_(velocity) {
   SetWidth(width);

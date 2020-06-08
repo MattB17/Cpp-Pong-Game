@@ -3,6 +3,7 @@
 
 #include "ball.h"
 #include "player.h"
+#include "paddle.h"
 #include "controller.h"
 #include "renderer.h"
 #include <vector>
@@ -17,6 +18,7 @@ class Game {
     std::vector<Player> players_;
   
     void Update(float elapsedTime);
+    bool BallHitPaddle(Paddle paddle);
 };
 
 #endif
