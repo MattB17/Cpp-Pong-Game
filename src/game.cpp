@@ -67,15 +67,24 @@ void Game::Update(float elapsedTime) {
   // check for collision with a paddle
   Contact contact{};
   for (auto player : players_) {
-    contact = BallHitPaddle(player.GetPaddle());
+    contact = GetBallPaddleContact(player.GetPaddle());
     if (contact.collisionType != CollisionType::kNone) {
       ball_.HandleObjectCollision(contact);
       break;
     }
   }
+  
+  // if collision type is still kNone, the ball didn't hit either paddle
+  if (contact.collisionType == CollisionType::kNone) {
+    contact = GetBallWallContact();
+    if (contact.collisionType != CollisionType::kNone) {
+      ball_.HandleWallCollision(contact);
+    }
+  }
 }
 
-Contact Game::BallHitPaddle(Paddle paddle) {
+Contact Game::GetBallPaddleContact(Paddle paddle) {
+  // contact is initialized with CollisionType of kNone
   Contact contact{};
   
   float ballLeft = ball_.GetPosition().GetX();
@@ -122,6 +131,34 @@ Contact Game::BallHitPaddle(Paddle paddle) {
     contact.collisionType = CollisionType::kMiddle;
   } else {
     contact.collisionType = CollisionType::kBottom;
+  }
+  
+  return contact;
+}
+
+Contact Game::GetBallWallContact() {
+  // contact is initialized with CollisionType of kNone
+  Contact contact{};
+  
+  float ballLeft = ball_.GetPosition().GetX();
+  float ballRight = ballLeft + ball_.GetWidth();
+  float ballTop = ball_.GetPosition().GetY();
+  float ballBottom = ballTop + ball_.GetHeight();
+  
+  if (ballLeft <= 0.0f) {
+    // hit left wall
+    contact.collisionType = CollisionType::kLeft;
+  } else if (ballRight >= kScreenWidth) {
+    // hit right wall
+    contact.collisionType = CollisionType::kRight;
+  } else if (ballTop <= 0.0f) {
+    // hit top wall
+    contact.collisionType = CollisionType::kTop;
+    contact.penetration = -ballTop;
+  } else if (ballBottom >= kScreenHeight) {
+    // hit bottom wall
+    contact.collisionType = CollisionType::kBottom;
+    contact.penetration = ballBottom - kScreenHeight;
   }
   
   return contact;

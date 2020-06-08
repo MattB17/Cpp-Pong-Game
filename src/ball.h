@@ -19,6 +19,7 @@ class Ball {
     void SetHeight(int height);
   
     void HandleObjectCollision(Contact const &contact);
+    void HandleWallCollision(Contact const &contact);
   
   private:
     Vec2D pos_;

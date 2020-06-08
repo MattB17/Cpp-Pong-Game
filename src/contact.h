@@ -5,7 +5,9 @@ enum class CollisionType {
   kNone,
   kTop,
   kMiddle,
-  kBottom
+  kBottom,
+  kLeft,
+  kRight
 };
 
 struct Contact {
