@@ -18,7 +18,7 @@ class Game {
     Ball ball_;
     std::vector<Player> players_;
   
-    void Update(float elapsedTime);
+    void Update(float elapsedTime, Renderer const &renderer);
     Contact GetBallPaddleContact(Paddle paddle);
     Contact GetBallWallContact();
 };

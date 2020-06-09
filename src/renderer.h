@@ -3,6 +3,7 @@
 
 #include "SDL.h"
 #include "SDL_ttf.h"
+#include "SDL_mixer.h"
 #include "ball.h"
 #include "vec2d.h"
 #include "paddle.h"
@@ -15,6 +16,9 @@ class Renderer {
     ~Renderer();
     
     void Render(Ball ball, std::vector<Player> const &players);
+  
+    Mix_Chunk *wallHitSound_;
+    Mix_Chunk *objectHitSound_;
   
   private:
     SDL_Window *window_;

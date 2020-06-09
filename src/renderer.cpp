@@ -7,7 +7,7 @@
 Renderer::Renderer()
   : screen_width_(kScreenWidth), screen_height_(kScreenHeight) {
     // Initialize SDL
-    if (SDL_Init(SDL_INIT_VIDEO) < 0) {
+    if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0) {
       std::cerr << "SDL could not initialize." << std::endl;
       std::cerr << "SDL Error: " << SDL_GetError() << std::endl;
     }
@@ -32,12 +32,31 @@ Renderer::Renderer()
       std::cerr << "SDL Error: " << SDL_GetError() << std::endl;
     }
       
-   // load TTF font
-   scoreFont_ = TTF_OpenFont("../fonts/DejaVuSansMono.ttf", 32);
-   if (scoreFont_ == nullptr) {
-     std::cerr << "Font could not be loaded." << std::endl;
-     std::cerr << "TTF Error: " << TTF_GetError() << std::endl;
-   }
+    // load TTF font
+    scoreFont_ = TTF_OpenFont("../fonts/DejaVuSansMono.ttf", 32);
+    if (scoreFont_ == nullptr) {
+      std::cerr << "Font could not be loaded." << std::endl;
+      std::cerr << "TTF Error: " << TTF_GetError() << std::endl;
+    }
+    
+    Mix_AllocateChannels(1);
+    
+    if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 1024) == -1) {
+      std::cerr << "Audio could not be opened." << std::endl;
+      std::cerr << "Mixer Error: " << Mix_GetError() << std::endl;
+    }
+    
+    wallHitSound_ = Mix_LoadWAV("../sounds/WallHit.wav");
+    if (wallHitSound_ == nullptr) {
+      std::cerr << "Wall audio could not be loaded." << std::endl;
+      std::cerr << "Mixer Error: " << Mix_GetError() << std::endl;
+    }
+   
+    objectHitSound_ = Mix_LoadWAV("../sounds/PaddleHit.wav");
+    if (objectHitSound_ == nullptr) {
+      std::cerr << "Object audio could not be loaded." << std::endl;
+      std::cerr << "Mixer Error: " << Mix_GetError() << std::endl;
+    }
 }
 
 Renderer::~Renderer() {
@@ -45,8 +64,11 @@ Renderer::~Renderer() {
   SDL_FreeSurface(surface_);
   SDL_DestroyTexture(texture_);
   TTF_CloseFont(scoreFont_);
+  Mix_FreeChunk(wallHitSound_);
+  Mix_FreeChunk(objectHitSound_);
   TTF_Quit();
   SDL_Quit();
+  Mix_Quit();
 }
 
 void Renderer::Render(Ball ball, std::vector<Player> const &players) {

@@ -1,16 +1,16 @@
-# Locate SDL2 library
+# Locate SDL2_ttf library
 # This module defines
-# SDL2_LIBRARY, the name of the library to link against
-# SDL2_FOUND, if false, do not try to link to SDL2
-# SDL2_INCLUDE_DIR, where to find SDL.h
+# SDL2TTF_LIBRARY, the name of the library to link against
+# SDL2TTF_FOUND, if false, do not try to link to SDL2
+# SDL2TTF_INCLUDE_DIR, where to find SDL.h
 #
 # This module responds to the the flag:
-# SDL2_BUILDING_LIBRARY
+# SDL2TTF_BUILDING_LIBRARY
 # If this is defined, then no SDL2main will be linked in because
 # only applications need main().
 # Otherwise, it is assumed you are building an application and this
 # module will attempt to locate and set the the proper link flags
-# as part of the returned SDL2_LIBRARY variable.
+# as part of the returned SDL2TTF_LIBRARY variable.
 #
 # Don't forget to include SDLmain.h and SDLmain.m your project for the
 # OS X framework based version. (Other versions link to -lSDL2main which
@@ -18,13 +18,13 @@
 # module will automatically add the -framework Cocoa on your behalf.
 #
 #
-# Additional Note: If you see an empty SDL2_LIBRARY_TEMP in your configuration
-# and no SDL2_LIBRARY, it means CMake did not find your SDL2 library
+# Additional Note: If you see an empty SDL2TTF_LIBRARY_TEMP in your configuration
+# and no SDL2TTF_LIBRARY, it means CMake did not find your SDL2 library
 # (SDL2.dll, libsdl2.so, SDL2.framework, etc).
-# Set SDL2_LIBRARY_TEMP to point to your SDL2 library, and configure again.
+# Set SDL2TTF_LIBRARY_TEMP to point to your SDL2 library, and configure again.
 # Similarly, if you see an empty SDL2MAIN_LIBRARY, you should set this value
 # as appropriate. These values are used to generate the final SDL2_LIBRARY
-# variable, but when these values are unset, SDL2_LIBRARY does not get created.
+# variable, but when these values are unset, SDL2TTF_LIBRARY does not get created.
 #
 #
 # $SDL2DIR is an environment variable that would

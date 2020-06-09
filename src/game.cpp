@@ -46,7 +46,7 @@ void Game::Run(Controller const &controller, Renderer &renderer) {
     
     // run input-update-render game loop
     controller.HandleInput(running, players_);
-    Update(elapsedTime);
+    Update(elapsedTime, renderer);
     renderer.Render(ball_, players_);
     
     auto stopTime = std::chrono::high_resolution_clock::now();
@@ -54,7 +54,7 @@ void Game::Run(Controller const &controller, Renderer &renderer) {
   }
 }
 
-void Game::Update(float elapsedTime) {
+void Game::Update(float elapsedTime, Renderer const &renderer) {
   
   // update position of paddles
   for (auto &player : players_) {
@@ -70,6 +70,7 @@ void Game::Update(float elapsedTime) {
     contact = GetBallPaddleContact(player.GetPaddle());
     if (contact.collisionType != CollisionType::kNone) {
       ball_.HandleObjectCollision(contact);
+      Mix_PlayChannel(-1, renderer.objectHitSound_, 0);
       break;
     }
   }
@@ -85,6 +86,8 @@ void Game::Update(float elapsedTime) {
         players_.at(1).IncrementScore();
       } else if (contact.collisionType == CollisionType::kRight) {
         players_.at(0).IncrementScore();
+      } else {
+        Mix_PlayChannel(-1, renderer.wallHitSound_, 0);
       }
     }
   }

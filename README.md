@@ -20,6 +20,7 @@ In fulfillment of this requirement, this repo implements a pong game. The initia
   * All installation instructions can be found [here](https://www.libsdl.org/projects/SDL_ttf/)
   * Note that for Linux an `apt` or `apt-get` installation is preferred to building from source:
     * `sudo apt-get -y install libsdl2-ttf-dev`
+  * For this to work a `FindSDL2TTF.cmake` file is required. This project has such a file in the `cmake` folder which was taken from the following [GitHub Page](https://github.com/Deraen/ohj2710/blob/master/cmake_modules/FindSDL2TTF.cmake)
 * DejaVu-TTF >= 2.37
   * All installation instructions can be found [here](https://sourceforge.net/projects/dejavu/files/dejavu/2.37/)
   * Note that for Linux an `apt` or `apt-get` installation is preferred to building from source:
@@ -29,6 +30,15 @@ In fulfillment of this requirement, this repo implements a pong game. The initia
   * Linux: gcc / g++ is installed by default on most Linux distros
   * Mac: same deal as make - [install Xcode command line tools](https://developer.apple.com/xcode/features/)
   * Windows: recommend using [MinGW](http://www.mingw.org/)
+* SDL2_mixer >= 2.0
+  * All installation instructions can be found on the [SDL2_Mixer Page](https://www.libsdl.org/projects/SDL_mixer/)
+  * Note that for Linux an `apt` or `apt-get` installation is preferred to building from source:
+    * `sudo apt-get -y install libsdl2-mixer-dev`
+  * For this to work a `FindSDL2_mixer.cmake` file is required. This project has such a file in the `cmake` folder which was taken from this [GitHub Page](https://github.com/Tangent128/luasdl2/blob/master/cmake/FindSDL2_mixer.cmake)
+  * In addition, two `.wav` files are required to render sound:
+    * [PaddleHit.wav](https://freesound.org/people/NoiseCollector/sounds/4360/)
+    * [WallHit.wav](https://freesound.org/people/NoiseCollector/sounds/4359/)
+  * Download these two files and rename them as above. Place them in a `sounds` folder below the root project directory.
 
 ## Basic Build Instructions
 
