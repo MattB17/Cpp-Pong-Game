@@ -3,9 +3,8 @@
 Player::Player(std::string name, 
                Paddle paddle, 
                std::unique_ptr<Vec2D> scoreDisplayPos)
-  : name_(name), paddle_(paddle){
+  : name_(name), paddle_(paddle), score_(0) {
   scoreDisplayPos_ = std::move(scoreDisplayPos);
-  score_ = std::make_unique<int>(0);
 }
 
 void Player::UpdatePaddlePosition(float elapsedTime) {

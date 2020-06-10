@@ -15,18 +15,18 @@ class Player {
     std::string GetName() const { return name_; }
     Paddle GetPaddle() const { return paddle_; }
     const Vec2D &GetScoreDisplayPos() const { return *scoreDisplayPos_; }
-    const int GetScore() const { return *score_; }
+    int GetScore() { return score_; }
     
     void UpdatePaddlePosition(float elapsedTime);
     void UpdatePaddleVelocityY(float y);
-    void IncrementScore() { ++(*score_); }
-    std::string GetScoreString() const { return std::to_string(*score_); }
+    void IncrementScore() { ++score_; }
+    std::string GetScoreString() const { return std::to_string(score_); }
     
   private:
     std::string name_;
     Paddle paddle_;
     std::unique_ptr<Vec2D> scoreDisplayPos_;
-    std::unique_ptr<int> score_;
+    int score_;
 };
 
 #endif
