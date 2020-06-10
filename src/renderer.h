@@ -15,7 +15,7 @@ class Renderer {
     Renderer();
     ~Renderer();
     
-    void Render(Ball ball, std::vector<Player> const &players);
+    void Render(Ball const &ball, std::vector<Player> const &players);
   
     Mix_Chunk *wallHitSound_;
     Mix_Chunk *objectHitSound_;
@@ -33,7 +33,7 @@ class Renderer {
     void DrawBall(Ball ball);
     void DrawPaddle(Paddle paddle);
     
-    void RenderPlayer(Player &player);
+    void RenderPlayer(const Player &player);
 };
 
 #endif

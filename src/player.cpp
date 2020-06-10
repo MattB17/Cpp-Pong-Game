@@ -1,10 +1,12 @@
 #include "player.h"
 
-Player::Player(std::string name, Paddle paddle, Vec2D scoreDisplayPos)
-  : name_(name), 
-    paddle_(paddle), 
-    scoreDisplayPos_(scoreDisplayPos), 
-    score_(0) {}
+Player::Player(std::string name, 
+               Paddle paddle, 
+               std::unique_ptr<Vec2D> scoreDisplayPos)
+  : name_(name), paddle_(paddle){
+  scoreDisplayPos_ = std::move(scoreDisplayPos);
+  score_ = std::make_unique<int>(0);
+}
 
 void Player::UpdatePaddlePosition(float elapsedTime) {
   paddle_.UpdatePosition(elapsedTime);

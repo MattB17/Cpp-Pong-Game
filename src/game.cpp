@@ -25,7 +25,7 @@ Game::Game() {
             Vec2D(0.0f, 0.0f),
             kPaddleWidth, 
             kPaddleHeight);
-  Vec2D scorePos1 = Vec2D(kScreenWidth / 4, 20);
+  std::unique_ptr<Vec2D> scorePos1 = std::make_unique<Vec2D>(kScreenWidth / 4, 20);
   players_.emplace_back(
     Player("Player1", std::move(p1), std::move(scorePos1)));
   
@@ -34,7 +34,7 @@ Game::Game() {
             Vec2D(0.0f, 0.0f),
             kPaddleWidth, 
             kPaddleHeight);
-  Vec2D scorePos2 = Vec2D(3 * kScreenWidth / 4, 20);
+  std::unique_ptr<Vec2D> scorePos2 = std::make_unique<Vec2D>(3 * kScreenWidth / 4, 20);
   players_.emplace_back(Player("Player2", std::move(p2), std::move(scorePos2)));
 }
 
@@ -66,7 +66,7 @@ void Game::Update(float elapsedTime, Renderer const &renderer) {
   
   // check for collision with a paddle
   Contact contact{};
-  for (auto player : players_) {
+  for (auto const &player : players_) {
     contact = GetBallPaddleContact(player.GetPaddle());
     if (contact.collisionType != CollisionType::kNone) {
       ball_->HandleObjectCollision(contact);

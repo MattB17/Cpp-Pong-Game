@@ -10,6 +10,6 @@ constexpr int kBallHeight{15};
 constexpr int kPaddleWidth{10};
 constexpr int kPaddleHeight{100};
 constexpr float kPaddleSpeed{0.5f};
-constexpr float kBallSpeed{1.0f};
+constexpr float kBallSpeed{2.0f};
 
 #endif

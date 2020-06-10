@@ -71,7 +71,7 @@ Renderer::~Renderer() {
   Mix_Quit();
 }
 
-void Renderer::Render(Ball ball, std::vector<Player> const &players) {
+void Renderer::Render(Ball const &ball, std::vector<Player> const &players) {
   // Set draw color to black and apply to whole screen
   SDL_SetRenderDrawColor(renderer_, 0x00, 0x00, 0x00, 0xFF);
   SDL_RenderClear(renderer_);
@@ -91,7 +91,7 @@ void Renderer::Render(Ball ball, std::vector<Player> const &players) {
   DrawBall(std::move(ball));
   
   // render the players
-  for (auto player : players) {
+  for (auto const &player : players) {
     RenderPlayer(player);
   }
   
@@ -121,7 +121,7 @@ void Renderer::DrawPaddle(Paddle paddle) {
   SDL_RenderFillRect(renderer_, &rect);
 }
 
-void Renderer::RenderPlayer(Player &player) {
+void Renderer::RenderPlayer(const Player &player) {
   DrawPaddle(player.GetPaddle());
   
   surface_ = TTF_RenderText_Solid(scoreFont_, 
