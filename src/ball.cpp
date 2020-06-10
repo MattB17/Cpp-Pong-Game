@@ -65,7 +65,3 @@ Ball::Ball(Vec2D position, Vec2D velocity, int width, int height)
 
 Ball::Ball(Vec2D position, Vec2D velocity)
   : pos_(position), velocity_(velocity), width_(1), height_(1) {}
-
-Ball::Ball() : width_(1), height_(1) {
-  pos_ = Vec2D();
-}

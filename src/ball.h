@@ -6,7 +6,6 @@
 
 class Ball {
   public:
-    Ball();
     Ball(Vec2D position, Vec2D velocity);
     Ball(Vec2D position, Vec2D velocity, int width, int height);
     

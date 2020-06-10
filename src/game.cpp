@@ -15,10 +15,10 @@ Game::Game() {
                            (kScreenHeight - kBallHeight) / 2.0f);
   
   // initialize ball and transfer ownership of initialPos
-  ball_ = Ball(std::move(initialPos),
-               Vec2D(kBallSpeed, 0.0f), 
-               kBallWidth, 
-               kBallHeight);
+  ball_ = std::make_unique<Ball>(std::move(initialPos),
+                                 Vec2D(kBallSpeed, 0.0f), 
+                                 kBallWidth, 
+                                 kBallHeight);
   
   // create players
   Paddle p1(Vec2D(50.0f, (kScreenHeight - kPaddleHeight) / 2.0f),
@@ -47,7 +47,7 @@ void Game::Run(Controller const &controller, Renderer &renderer) {
     // run input-update-render game loop
     controller.HandleInput(running, players_);
     Update(elapsedTime, renderer);
-    renderer.Render(ball_, players_);
+    renderer.Render(*ball_, players_);
     
     auto stopTime = std::chrono::high_resolution_clock::now();
     elapsedTime = std::chrono::duration<float, std::chrono::milliseconds::period>(stopTime - startTime).count();
@@ -62,14 +62,14 @@ void Game::Update(float elapsedTime, Renderer const &renderer) {
   }
   
   // update ball position
-  ball_.UpdatePosition(elapsedTime);
+  ball_->UpdatePosition(elapsedTime);
   
   // check for collision with a paddle
   Contact contact{};
   for (auto player : players_) {
     contact = GetBallPaddleContact(player.GetPaddle());
     if (contact.collisionType != CollisionType::kNone) {
-      ball_.HandleObjectCollision(contact);
+      ball_->HandleObjectCollision(contact);
       Mix_PlayChannel(-1, renderer.objectHitSound_, 0);
       break;
     }
@@ -79,7 +79,7 @@ void Game::Update(float elapsedTime, Renderer const &renderer) {
   if (contact.collisionType == CollisionType::kNone) {
     contact = GetBallWallContact();
     if (contact.collisionType != CollisionType::kNone) {
-      ball_.HandleWallCollision(contact);
+      ball_->HandleWallCollision(contact);
       
       // increment appropriate player's score depending on collision type
       if (contact.collisionType == CollisionType::kLeft) {
@@ -97,8 +97,8 @@ Contact Game::GetBallPaddleContact(Paddle paddle) {
   // contact is initialized with CollisionType of kNone
   Contact contact{};
   
-  float ballLeft = ball_.GetPosition().GetX();
-  float ballRight = ballLeft + ball_.GetWidth();
+  float ballLeft = ball_->GetPosition().GetX();
+  float ballRight = ballLeft + ball_->GetWidth();
   
   float paddleLeft = paddle.GetPosition().GetX();
   float paddleRight = paddleLeft + paddle.GetWidth();
@@ -108,8 +108,8 @@ Contact Game::GetBallPaddleContact(Paddle paddle) {
     return contact;
   }
   
-  float ballTop = ball_.GetPosition().GetY();
-  float ballBottom = ballTop + ball_.GetHeight();
+  float ballTop = ball_->GetPosition().GetY();
+  float ballBottom = ballTop + ball_->GetHeight();
   
   float paddleTop = paddle.GetPosition().GetY();
   float paddleBottom = paddleTop + paddle.GetHeight();
@@ -122,10 +122,10 @@ Contact Game::GetBallPaddleContact(Paddle paddle) {
   // otherwise, they collide on both axes
   
   // set level of penetration
-  if (ball_.GetVelocity().GetX() < 0) {
+  if (ball_->GetVelocity().GetX() < 0) {
     // hit object from the right
     contact.penetration = paddleRight - ballLeft;
-  } else if (ball_.GetVelocity().GetX() > 0) {
+  } else if (ball_->GetVelocity().GetX() > 0) {
     // hit object from the left
     contact.penetration = paddleLeft - ballRight;
   }
@@ -150,10 +150,10 @@ Contact Game::GetBallWallContact() {
   // contact is initialized with CollisionType of kNone
   Contact contact{};
   
-  float ballLeft = ball_.GetPosition().GetX();
-  float ballRight = ballLeft + ball_.GetWidth();
-  float ballTop = ball_.GetPosition().GetY();
-  float ballBottom = ballTop + ball_.GetHeight();
+  float ballLeft = ball_->GetPosition().GetX();
+  float ballRight = ballLeft + ball_->GetWidth();
+  float ballTop = ball_->GetPosition().GetY();
+  float ballBottom = ballTop + ball_->GetHeight();
   
   if (ballLeft <= 0.0f) {
     // hit left wall

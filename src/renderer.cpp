@@ -41,7 +41,7 @@ Renderer::Renderer()
     
     Mix_AllocateChannels(1);
     
-    if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 1024) == -1) {
+    if (Mix_OpenAudio(22050, AUDIO_S8, 2, 1024) == -1) {
       std::cerr << "Audio could not be opened." << std::endl;
       std::cerr << "Mixer Error: " << Mix_GetError() << std::endl;
     }

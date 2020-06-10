@@ -8,6 +8,7 @@
 #include "renderer.h"
 #include "contact.h"
 #include <vector>
+#include <memory>
 
 class Game {
   public:
@@ -15,7 +16,7 @@ class Game {
     void Run(Controller const &controller, Renderer &renderer);
   
   private:
-    Ball ball_;
+    std::unique_ptr<Ball> ball_;
     std::vector<Player> players_;
   
     void Update(float elapsedTime, Renderer const &renderer);
