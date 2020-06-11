@@ -20,7 +20,7 @@ class Game {
     std::vector<Player> players_;
   
     void Update(float elapsedTime, Renderer const &renderer);
-    Contact GetBallPaddleContact(Paddle paddle);
+    Contact GetBallPaddleContact(Paddle &paddle);
     Contact GetBallWallContact();
 };
 

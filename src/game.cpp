@@ -21,20 +21,21 @@ Game::Game() {
                                  kBallHeight);
   
   // create players
-  Paddle p1(Vec2D(50.0f, (kScreenHeight - kPaddleHeight) / 2.0f),
-            Vec2D(0.0f, 0.0f),
-            kPaddleWidth, 
-            kPaddleHeight);
-  std::unique_ptr<Vec2D> scorePos1 = std::make_unique<Vec2D>(kScreenWidth / 4, 20);
+  std::unique_ptr<Paddle> p1 = std::make_unique<Paddle>(Vec2D(50.0f, 
+                                                              (kScreenHeight - kPaddleHeight) / 2.0f),
+                                                        Vec2D(0.0f, 0.0f),
+                                                        kPaddleWidth, 
+                                                        kPaddleHeight);
+  std::unique_ptr<const Vec2D> scorePos1 = std::make_unique<const Vec2D>(kScreenWidth / 4, 20);
   players_.emplace_back(
     Player("Player1", std::move(p1), std::move(scorePos1)));
   
-  Paddle p2(Vec2D(kScreenWidth - 50.0f, 
-                 (kScreenHeight - kPaddleHeight) / 2.0f),
-            Vec2D(0.0f, 0.0f),
-            kPaddleWidth, 
-            kPaddleHeight);
-  std::unique_ptr<Vec2D> scorePos2 = std::make_unique<Vec2D>(3 * kScreenWidth / 4, 20);
+  std::unique_ptr<Paddle> p2 = std::make_unique<Paddle>(Vec2D(kScreenWidth - 50.0f, 
+                                                              (kScreenHeight - kPaddleHeight) / 2.0f),
+                                                        Vec2D(0.0f, 0.0f),
+                                                        kPaddleWidth, 
+                                                        kPaddleHeight);
+  std::unique_ptr<const Vec2D> scorePos2 = std::make_unique<const Vec2D>(3 * kScreenWidth / 4, 20);
   players_.emplace_back(Player("Player2", std::move(p2), std::move(scorePos2)));
 }
 
@@ -93,7 +94,7 @@ void Game::Update(float elapsedTime, Renderer const &renderer) {
   }
 }
 
-Contact Game::GetBallPaddleContact(Paddle paddle) {
+Contact Game::GetBallPaddleContact(Paddle &paddle) {
   // contact is initialized with CollisionType of kNone
   Contact contact{};
   

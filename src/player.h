@@ -9,11 +9,11 @@
 class Player {
   public:
     Player(std::string name, 
-           Paddle paddle, 
-           std::unique_ptr<Vec2D> scoreDisplayPos);
+           std::unique_ptr<Paddle> paddle, 
+           std::unique_ptr<const Vec2D> scoreDisplayPos);
   
     std::string GetName() const { return name_; }
-    Paddle GetPaddle() const { return paddle_; }
+    Paddle &GetPaddle() const { return *paddle_; }
     const Vec2D &GetScoreDisplayPos() const { return *scoreDisplayPos_; }
     int GetScore() { return score_; }
     
@@ -24,8 +24,8 @@ class Player {
     
   private:
     std::string name_;
-    Paddle paddle_;
-    std::unique_ptr<Vec2D> scoreDisplayPos_;
+    std::unique_ptr<Paddle> paddle_;
+    std::unique_ptr<const Vec2D> scoreDisplayPos_;
     int score_;
 };
 
