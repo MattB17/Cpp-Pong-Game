@@ -30,9 +30,9 @@ class Renderer {
     const std::size_t screen_width_;
     const std::size_t screen_height_;
     
+    void RenderTable();
     void DrawBall(Ball ball);
     void DrawPaddle(Paddle paddle);
-    
     void RenderPlayer(const Player &player);
 };
 

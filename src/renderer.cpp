@@ -39,9 +39,7 @@ Renderer::Renderer()
       std::cerr << "TTF Error: " << TTF_GetError() << std::endl;
     }
     
-    Mix_AllocateChannels(1);
-    
-    if (Mix_OpenAudio(22050, AUDIO_S8, 2, 1024) == -1) {
+    if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 1024) == -1) {
       std::cerr << "Audio could not be opened." << std::endl;
       std::cerr << "Mixer Error: " << Mix_GetError() << std::endl;
     }
@@ -72,6 +70,22 @@ Renderer::~Renderer() {
 }
 
 void Renderer::Render(Ball const &ball, std::vector<Player> const &players) {
+  // draw the table
+  RenderTable();
+  
+  // draw the ball
+  DrawBall(std::move(ball));
+  
+  // render the players
+  for (auto const &player : players) {
+    RenderPlayer(player);
+  }
+  
+  // update screen
+  SDL_RenderPresent(renderer_);
+}
+
+void Renderer::RenderTable() {
   // Set draw color to black and apply to whole screen
   SDL_SetRenderDrawColor(renderer_, 0x00, 0x00, 0x00, 0xFF);
   SDL_RenderClear(renderer_);
@@ -86,18 +100,8 @@ void Renderer::Render(Ball const &ball, std::vector<Player> const &players) {
       SDL_RenderDrawPoint(renderer_, screen_width_ / 2, y);
     }
   }
-  
-  // draw the ball
-  DrawBall(std::move(ball));
-  
-  // render the players
-  for (auto const &player : players) {
-    RenderPlayer(player);
-  }
-  
-  // update screen
-  SDL_RenderPresent(renderer_);
 }
+  
 
 void Renderer::DrawBall(Ball ball) {
   SDL_Rect rect{};
