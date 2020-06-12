@@ -9,10 +9,8 @@ Renderer::Renderer()
     // Run SDL
     runner_ = std::make_shared<SDL_Runner>();
     
-    if (TTF_Init() == -1) {
-      std::cerr << "TTF could not be initialized." << std::endl;
-      std::cerr << "TTF Error: " << TTF_GetError() << std::endl;
-    }
+    // initialize a text_handler
+    textHandler_ = std::make_unique<TextHandler>(runner_);
     
     // Create SDL Window
     window_ = SDL_CreateWindow("Pong", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
@@ -27,13 +25,6 @@ Renderer::Renderer()
     if (renderer_ == nullptr) {
       std::cerr << "Renderer could not be created." << std::endl;
       std::cerr << "SDL Error: " << SDL_GetError() << std::endl;
-    }
-      
-    // load TTF font
-    scoreFont_ = TTF_OpenFont("../fonts/DejaVuSansMono.ttf", 32);
-    if (scoreFont_ == nullptr) {
-      std::cerr << "Font could not be loaded." << std::endl;
-      std::cerr << "TTF Error: " << TTF_GetError() << std::endl;
     }
     
     if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 1024) == -1) {
@@ -56,12 +47,8 @@ Renderer::Renderer()
 
 Renderer::~Renderer() {
   SDL_DestroyWindow(window_);
-  SDL_FreeSurface(surface_);
-  SDL_DestroyTexture(texture_);
-  TTF_CloseFont(scoreFont_);
   Mix_FreeChunk(wallHitSound_);
   Mix_FreeChunk(objectHitSound_);
-  TTF_Quit();
   Mix_Quit();
 }
 
@@ -121,23 +108,7 @@ void Renderer::DrawPaddle(Paddle paddle) {
   SDL_RenderFillRect(renderer_, &rect);
 }
 
-void Renderer::RenderPlayer(const Player &player) {
+void Renderer::RenderPlayer(Player const &player) {
   DrawPaddle(player.GetPaddle());
-  
-  surface_ = TTF_RenderText_Solid(scoreFont_, 
-                                  player.GetScoreString().c_str(), 
-                                  {0xFF, 0xFF, 0xFF, 0xFF});
-  texture_ = SDL_CreateTextureFromSurface(renderer_, surface_);
-  
-  int width, height;
-  SDL_QueryTexture(texture_, nullptr, nullptr, &width, &height);
-  
-  SDL_Rect rect{};
-  
-  rect.x = static_cast<int>(player.GetScoreDisplayPos().GetX());
-  rect.y = static_cast<int>(player.GetScoreDisplayPos().GetY());
-  rect.w = width;
-  rect.h = height;
-  
-  SDL_RenderCopy(renderer_, texture_, nullptr, &rect);
+  textHandler_->DrawPlayerScore(renderer_, player);
 }

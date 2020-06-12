@@ -2,6 +2,7 @@
 #define RENDERER_H
 
 #include "SDL_runner.h"
+#include "text_handler.h"
 #include "ball.h"
 #include "vec2d.h"
 #include "paddle.h"
@@ -20,13 +21,11 @@ class Renderer {
     Mix_Chunk *objectHitSound_;
   
   private:
-    std::shared_ptr<SDL_Runner> runner_;
+    std::unique_ptr<TextHandler> textHandler_;
   
+    std::shared_ptr<SDL_Runner> runner_;
     SDL_Window *window_;
     SDL_Renderer *renderer_;
-    TTF_Font *scoreFont_;
-    SDL_Surface *surface_{};
-    SDL_Texture *texture_{};
   
     const std::size_t screen_width_;
     const std::size_t screen_height_;
@@ -34,7 +33,7 @@ class Renderer {
     void RenderTable();
     void DrawBall(Ball ball);
     void DrawPaddle(Paddle paddle);
-    void RenderPlayer(const Player &player);
+    void RenderPlayer(Player const &player);
 };
 
 #endif
