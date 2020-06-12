@@ -33,7 +33,8 @@ add_executable(
     src/game/paddle.cpp 
     src/game/player.cpp
     
-    src/render/renderer.cpp)
+    src/render/renderer.cpp
+    src/render/SDL_runner.cpp)
 
 string(STRIP ${SDL2_LIBRARIES} SDL2_LIBRARIES)
 target_link_libraries(

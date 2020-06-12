@@ -6,11 +6,8 @@
 
 Renderer::Renderer()
   : screen_width_(kScreenWidth), screen_height_(kScreenHeight) {
-    // Initialize SDL
-    if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0) {
-      std::cerr << "SDL could not initialize." << std::endl;
-      std::cerr << "SDL Error: " << SDL_GetError() << std::endl;
-    }
+    // Run SDL
+    runner_ = std::make_shared<SDL_Runner>();
     
     if (TTF_Init() == -1) {
       std::cerr << "TTF could not be initialized." << std::endl;
@@ -65,7 +62,6 @@ Renderer::~Renderer() {
   Mix_FreeChunk(wallHitSound_);
   Mix_FreeChunk(objectHitSound_);
   TTF_Quit();
-  SDL_Quit();
   Mix_Quit();
 }
 
