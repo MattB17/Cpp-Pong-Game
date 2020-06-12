@@ -9,12 +9,15 @@ Renderer::Renderer()
     // Run SDL
     runner_ = std::make_shared<SDL_Runner>();
     
-    // initialize a text_handler
+    // initialize a text handler
     textHandler_ = std::make_unique<TextHandler>(runner_);
+    
+    // initialize an audio handler
+    audioHandler_ = std::make_unique<AudioHandler>(runner_);
     
     // Create SDL Window
     window_ = SDL_CreateWindow("Pong", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-                              screen_width_, screen_height_, SDL_WINDOW_SHOWN);
+                               screen_width_, screen_height_, SDL_WINDOW_SHOWN);
     if (window_ == nullptr) {
       std::cerr << "Window could not be created." << std::endl;
       std::cerr << "SDL Error: " << SDL_GetError() << std::endl;
@@ -26,30 +29,11 @@ Renderer::Renderer()
       std::cerr << "Renderer could not be created." << std::endl;
       std::cerr << "SDL Error: " << SDL_GetError() << std::endl;
     }
-    
-    if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 1024) == -1) {
-      std::cerr << "Audio could not be opened." << std::endl;
-      std::cerr << "Mixer Error: " << Mix_GetError() << std::endl;
-    }
-    
-    wallHitSound_ = Mix_LoadWAV("../sounds/WallHit.wav");
-    if (wallHitSound_ == nullptr) {
-      std::cerr << "Wall audio could not be loaded." << std::endl;
-      std::cerr << "Mixer Error: " << Mix_GetError() << std::endl;
-    }
-   
-    objectHitSound_ = Mix_LoadWAV("../sounds/PaddleHit.wav");
-    if (objectHitSound_ == nullptr) {
-      std::cerr << "Object audio could not be loaded." << std::endl;
-      std::cerr << "Mixer Error: " << Mix_GetError() << std::endl;
-    }
 }
 
 Renderer::~Renderer() {
   SDL_DestroyWindow(window_);
-  Mix_FreeChunk(wallHitSound_);
-  Mix_FreeChunk(objectHitSound_);
-  Mix_Quit();
+  SDL_DestroyRenderer(renderer_);
 }
 
 void Renderer::Render(Ball const &ball, std::vector<Player> const &players) {
@@ -66,6 +50,14 @@ void Renderer::Render(Ball const &ball, std::vector<Player> const &players) {
   
   // update screen
   SDL_RenderPresent(renderer_);
+}
+
+void Renderer::PlayObjectHitSound() const {
+  audioHandler_->PlayObjectHitSound();
+}
+
+void Renderer::PlayWallHitSound() const {
+  audioHandler_->PlayWallHitSound();
 }
 
 void Renderer::RenderTable() {

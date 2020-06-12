@@ -71,7 +71,7 @@ void Game::Update(float elapsedTime, Renderer const &renderer) {
     contact = GetBallPaddleContact(player.GetPaddle());
     if (contact.collisionType != CollisionType::kNone) {
       ball_->HandleObjectCollision(contact);
-      Mix_PlayChannel(-1, renderer.objectHitSound_, 0);
+      renderer.PlayObjectHitSound();
       break;
     }
   }
@@ -88,7 +88,7 @@ void Game::Update(float elapsedTime, Renderer const &renderer) {
       } else if (contact.collisionType == CollisionType::kRight) {
         players_.at(0).IncrementScore();
       } else {
-        Mix_PlayChannel(-1, renderer.wallHitSound_, 0);
+        renderer.PlayWallHitSound();
       }
     }
   }

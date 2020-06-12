@@ -3,6 +3,7 @@
 
 #include "SDL_runner.h"
 #include "text_handler.h"
+#include "audio_handler.h"
 #include "ball.h"
 #include "vec2d.h"
 #include "paddle.h"
@@ -16,12 +17,13 @@ class Renderer {
     ~Renderer();
     
     void Render(Ball const &ball, std::vector<Player> const &players);
-  
-    Mix_Chunk *wallHitSound_;
-    Mix_Chunk *objectHitSound_;
+    
+    void PlayObjectHitSound() const;
+    void PlayWallHitSound() const;
   
   private:
     std::unique_ptr<TextHandler> textHandler_;
+    std::unique_ptr<AudioHandler> audioHandler_;
   
     std::shared_ptr<SDL_Runner> runner_;
     SDL_Window *window_;

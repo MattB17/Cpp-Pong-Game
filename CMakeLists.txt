@@ -35,7 +35,8 @@ add_executable(
     
     src/render/renderer.cpp
     src/render/SDL_runner.cpp
-    src/render/text_handler.cpp)
+    src/render/text_handler.cpp
+    src/render/audio_handler.cpp)
 
 string(STRIP ${SDL2_LIBRARIES} SDL2_LIBRARIES)
 target_link_libraries(
