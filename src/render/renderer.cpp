@@ -40,9 +40,9 @@ Renderer::~Renderer() {
   SDL_DestroyRenderer(renderer_);
 }
 
-void Renderer::Render(Ball const &ball, std::vector<Player> const &players) {
+void Renderer::Render(Ball const &ball, Player const &user, Player const &computerAI) {
   // draw the table
-  RenderGameBoard(players);
+  RenderGameBoard(user, computerAI);
   
   // draw the ball
   DrawBall(std::move(ball));
@@ -51,9 +51,9 @@ void Renderer::Render(Ball const &ball, std::vector<Player> const &players) {
   SDL_RenderPresent(renderer_);
 }
 
-void Renderer::RenderCountPage(int count, std::vector<Player> const &players) {
+void Renderer::RenderCountPage(int count, Player const &user, Player const &computerAI) {
   // draw the table
-  RenderGameBoard(players);
+  RenderGameBoard(user, computerAI);
   
   // draw count in center of screen
   textHandler_->DrawCount(renderer_, count, center_);
@@ -70,14 +70,13 @@ void Renderer::PlayWallHitSound() const {
   audioHandler_->PlayWallHitSound();
 }
 
-void Renderer::RenderGameBoard(std::vector<Player> const &players) {
+void Renderer::RenderGameBoard(Player const &user, Player const &computerAI) {
   // draw the table
   RenderTable();
   
   // render the players
-  for (auto const &player : players) {
-    RenderPlayer(player);
-  }
+  RenderPlayer(user);
+  RenderPlayer(computerAI);
 }
 
 void Renderer::RenderTable() {

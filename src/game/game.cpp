@@ -22,10 +22,8 @@ Game::Game() {
   
   // create players
   float centerY = (kScreenHeight - kPaddleHeight) / 2.0f;
-  players_.emplace_back(
-    Player("Player1", 50.0f, centerY, kScreenWidth / 4.0f));
-  players_.emplace_back(
-    Player("Player2", kScreenWidth - 50.0f, centerY, 3 * kScreenWidth / 4.0f));
+  user_ = std::make_unique<Player>("User", 50.0f, centerY, kScreenWidth / 4.0f);
+  computerAI_ = std::make_unique<Player>("ComputerAI", kScreenWidth - 50.0f, centerY, 3 * kScreenWidth / 4.0f);
 }
 
 void Game::Run(Controller const &controller, Renderer &renderer) {
@@ -33,7 +31,7 @@ void Game::Run(Controller const &controller, Renderer &renderer) {
   int count = 3;
   while (running && count > 0) {
     controller.CheckForQuit(running);
-    renderer.RenderCountPage(count, players_);
+    renderer.RenderCountPage(count, *user_, *computerAI_);
     
     --count;
     
@@ -45,9 +43,9 @@ void Game::Run(Controller const &controller, Renderer &renderer) {
     auto startTime = std::chrono::high_resolution_clock::now();
     
     // run input-update-render game loop
-    controller.HandleInput(running, players_);
+    controller.HandleInput(running, *user_, *computerAI_);
     Update(elapsedTime, renderer);
-    renderer.Render(*ball_, players_);
+    renderer.Render(*ball_, *user_, *computerAI_);
     
     auto stopTime = std::chrono::high_resolution_clock::now();
     elapsedTime = std::chrono::duration<float, std::chrono::milliseconds::period>(stopTime - startTime).count();
@@ -57,40 +55,44 @@ void Game::Run(Controller const &controller, Renderer &renderer) {
 void Game::Update(float elapsedTime, Renderer const &renderer) {
   
   // update position of paddles
-  for (auto &player : players_) {
-    player.UpdatePaddlePosition(elapsedTime);
-  }
+  user_->UpdatePaddlePosition(elapsedTime);
+  computerAI_->UpdatePaddlePosition(elapsedTime);
   
   // update ball position
   ball_->UpdatePosition(elapsedTime);
   
   // check for collision with a paddle
-  Contact contact{};
-  for (auto const &player : players_) {
-    contact = GetBallPaddleContact(player.GetPaddle());
-    if (contact.collisionType != CollisionType::kNone) {
-      ball_->HandleObjectCollision(contact);
-      renderer.PlayObjectHitSound();
-      break;
-    }
-  }
-  
-  // if collision type is still kNone, the ball didn't hit either paddle
-  if (contact.collisionType == CollisionType::kNone) {
-    contact = GetBallWallContact();
-    if (contact.collisionType != CollisionType::kNone) {
-      ball_->HandleWallCollision(contact);
+  Contact contact = GetBallPaddleContact(user_->GetPaddle());
+  if (contact.IsHit()) {
+    // if hit user's paddle, update accordingly
+    HandleBallPaddleContact(contact, renderer);
+  } else {
+    contact = GetBallPaddleContact(computerAI_->GetPaddle());
+    if (contact.IsHit()) {
+      // if hit computerAI's paddle, update accordingly
+      HandleBallPaddleContact(contact, renderer);
+    } else {
+      // otherwise, check if it hit wall
+      contact = GetBallWallContact();
+      if (contact.collisionType != CollisionType::kNone) {
+        ball_->HandleWallCollision(contact);
       
-      // increment appropriate player's score depending on collision type
-      if (contact.collisionType == CollisionType::kLeft) {
-        players_.at(1).IncrementScore();
-      } else if (contact.collisionType == CollisionType::kRight) {
-        players_.at(0).IncrementScore();
-      } else {
-        renderer.PlayWallHitSound();
+        // increment appropriate player's score depending on collision type
+        if (contact.collisionType == CollisionType::kLeft) {
+          user_->IncrementScore();
+        } else if (contact.collisionType == CollisionType::kRight) {
+          computerAI_->IncrementScore();
+        } else {
+          renderer.PlayWallHitSound();
+        }
       }
     }
   }
+}
+
+void Game::HandleBallPaddleContact(Contact contact, Renderer const &renderer) {
+  ball_->HandleObjectCollision(contact);
+  renderer.PlayObjectHitSound();
 }
 
 Contact Game::GetBallPaddleContact(Paddle const &paddle) {

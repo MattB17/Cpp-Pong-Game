@@ -16,8 +16,8 @@ class Renderer {
     Renderer();
     ~Renderer();
     
-    void Render(Ball const &ball, std::vector<Player> const &players);
-    void RenderCountPage(int count, std::vector<Player> const &players);
+    void Render(Ball const &ball, Player const &user, Player const &computerAI);
+    void RenderCountPage(int count, Player const &user, Player const &computerAI);
     
     void PlayObjectHitSound() const;
     void PlayWallHitSound() const;
@@ -32,7 +32,7 @@ class Renderer {
   
     const Vec2D center_;
     
-    void RenderGameBoard(std::vector<Player> const &players);
+    void RenderGameBoard(Player const &user, Player const &computerAI);
     void RenderTable();
     void DrawBall(Ball const &ball);
     void DrawPaddle(Paddle const &paddle);

@@ -12,7 +12,7 @@ void Controller::CheckForQuit(bool &running) const {
   }
 }
 
-void Controller::HandleInput(bool &running, std::vector<Player> &players) const {
+void Controller::HandleInput(bool &running, Player &user, Player &computerAI) const {
   SDL_Event event;
   // continuously poll
   while (SDL_PollEvent(&event)) {
@@ -22,27 +22,27 @@ void Controller::HandleInput(bool &running, std::vector<Player> &players) const 
     } else if (event.type == SDL_KEYDOWN) {
       switch(event.key.keysym.sym) {
         case SDLK_UP:
-          ChangePaddleDirection(players.at(1), Paddle::Direction::kUp);
+          ChangePaddleDirection(computerAI, Paddle::Direction::kUp);
           break;
         case SDLK_DOWN:
-          ChangePaddleDirection(players.at(1), Paddle::Direction::kDown);
+          ChangePaddleDirection(computerAI, Paddle::Direction::kDown);
           break;
         case SDLK_w:
-          ChangePaddleDirection(players.at(0), Paddle::Direction::kUp);
+          ChangePaddleDirection(user, Paddle::Direction::kUp);
           break;
         case SDLK_s:
-          ChangePaddleDirection(players.at(0), Paddle::Direction::kDown);
+          ChangePaddleDirection(user, Paddle::Direction::kDown);
           break;
       }
     } else if (event.type == SDL_KEYUP) {
       switch(event.key.keysym.sym) {
         case SDLK_UP:
         case SDLK_DOWN:
-          ChangePaddleDirection(players.at(1), Paddle::Direction::kNone);
+          ChangePaddleDirection(computerAI, Paddle::Direction::kNone);
           break;
         case SDLK_w:
         case SDLK_s:
-          ChangePaddleDirection(players.at(0), Paddle::Direction::kNone);
+          ChangePaddleDirection(user, Paddle::Direction::kNone);
           break;
       }
     }

@@ -13,6 +13,8 @@ enum class CollisionType {
 struct Contact {
   CollisionType collisionType;
   float penetration;
+  
+  bool IsHit() { return collisionType != CollisionType::kNone; }
 };
 
 #endif

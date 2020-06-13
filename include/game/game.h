@@ -7,7 +7,6 @@
 #include "controller.h"
 #include "renderer.h"
 #include "contact.h"
-#include <vector>
 #include <memory>
 
 class Game {
@@ -17,9 +16,12 @@ class Game {
   
   private:
     std::unique_ptr<Ball> ball_;
-    std::vector<Player> players_;
+    std::unique_ptr<Player> user_;
+    std::unique_ptr<Player> computerAI_;
   
     void Update(float elapsedTime, Renderer const &renderer);
+    void HandleBallPaddleContact(Contact contact, Renderer const &renderer);
+  
     Contact GetBallPaddleContact(Paddle const &paddle);
     Contact GetBallWallContact();
 };
