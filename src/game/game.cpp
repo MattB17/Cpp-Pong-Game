@@ -41,6 +41,16 @@ Game::Game() {
 
 void Game::Run(Controller const &controller, Renderer &renderer) {
   bool running = true;
+  int count = 3;
+  while (running && count > 0) {
+    controller.CheckForQuit(running);
+    renderer.RenderCountPage(count, players_);
+    
+    --count;
+    
+    std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+  }
+  
   float elapsedTime = 0.0f;
   while(running) {
     auto startTime = std::chrono::high_resolution_clock::now();

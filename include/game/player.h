@@ -20,7 +20,7 @@ class Player {
     void UpdatePaddlePosition(float elapsedTime);
     void UpdatePaddleVelocityY(float y);
     void IncrementScore() { ++score_; }
-    std::string GetScoreString() const { return std::to_string(score_); }
+    const std::string GetScoreString() const { return std::to_string(score_); }
     
   private:
     std::string name_;

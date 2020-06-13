@@ -17,6 +17,7 @@ class Renderer {
     ~Renderer();
     
     void Render(Ball const &ball, std::vector<Player> const &players);
+    void RenderCountPage(int count, std::vector<Player> const &players);
     
     void PlayObjectHitSound() const;
     void PlayWallHitSound() const;
@@ -29,9 +30,9 @@ class Renderer {
     SDL_Window *window_;
     SDL_Renderer *renderer_;
   
-    const std::size_t screen_width_;
-    const std::size_t screen_height_;
+    const Vec2D center_;
     
+    void RenderGameBoard(std::vector<Player> const &players);
     void RenderTable();
     void DrawBall(Ball ball);
     void DrawPaddle(Paddle paddle);

@@ -10,7 +10,8 @@ TextHandler::TextHandler(std::shared_ptr<SDL_Runner> runner) : runner_(runner) {
     
     // load TTF font
     scoreFont_ = TTF_OpenFont("../fonts/DejaVuSansMono.ttf", 32);
-    if (scoreFont_ == nullptr) {
+    countFont_ = TTF_OpenFont("../fonts/DejaVuSansMono.ttf", 72);
+    if (scoreFont_ == nullptr || countFont_ == nullptr) {
       std::cerr << "Font could not be loaded." << std::endl;
       std::cerr << "TTF Error: " << TTF_GetError() << std::endl;
     }
@@ -24,10 +25,21 @@ TextHandler::~TextHandler() {
 }
 
 void TextHandler::DrawPlayerScore(SDL_Renderer *renderer, Player const &player) {
-  // set up a surface and texture for the score in white.
-  surface_ = TTF_RenderText_Solid(scoreFont_, 
-                                  player.GetScoreString().c_str(), 
+  surface_ = TTF_RenderText_Solid(scoreFont_,
+                                  player.GetScoreString().c_str(),
                                   {0xFF, 0xFF, 0xFF, 0xFF});
+  DrawText(renderer, player.GetScoreDisplayPos());
+}
+
+void TextHandler::DrawCount(SDL_Renderer *renderer, int count, Vec2D const &position) {
+  surface_ = TTF_RenderText_Solid(countFont_,
+                                  std::to_string(count).c_str(),
+                                  {0xFF, 0xFF, 0xFF, 0xFF});
+  DrawText(renderer, position);
+}
+  
+
+void TextHandler::DrawText(SDL_Renderer *renderer, Vec2D const &position) {
   texture_ = SDL_CreateTextureFromSurface(renderer, surface_);
   
   // get the width and height of the text
@@ -36,8 +48,8 @@ void TextHandler::DrawPlayerScore(SDL_Renderer *renderer, Player const &player) 
   
   // create a rectangle to display the score
   SDL_Rect rect{};
-  rect.x = static_cast<int>(player.GetScoreDisplayPos().GetX());
-  rect.y = static_cast<int>(player.GetScoreDisplayPos().GetY());
+  rect.x = static_cast<int>(position.GetX());
+  rect.y = static_cast<int>(position.GetY());
   rect.w = width;
   rect.h = height;
 

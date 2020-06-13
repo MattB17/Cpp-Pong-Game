@@ -8,6 +8,7 @@
 class Controller {
   public:
     Controller() {};
+    void CheckForQuit(bool &running) const;
     void HandleInput(bool &running, std::vector<Player> &players) const;
   
   private:

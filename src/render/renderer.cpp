@@ -4,8 +4,8 @@
 #include <string>
 #include <stdlib.h>
 
-Renderer::Renderer()
-  : screen_width_(kScreenWidth), screen_height_(kScreenHeight) {
+Renderer::Renderer() 
+  : center_(Vec2D(kScreenWidth / 2.0f, kScreenHeight / 2.0f)) {
     // Run SDL
     runner_ = std::make_shared<SDL_Runner>();
     
@@ -16,8 +16,12 @@ Renderer::Renderer()
     audioHandler_ = std::make_unique<AudioHandler>(runner_);
     
     // Create SDL Window
-    window_ = SDL_CreateWindow("Pong", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-                               screen_width_, screen_height_, SDL_WINDOW_SHOWN);
+    window_ = SDL_CreateWindow("Pong", 
+                               SDL_WINDOWPOS_CENTERED, 
+                               SDL_WINDOWPOS_CENTERED,
+                               center_.GetX() * 2.0f, 
+                               center_.GetY() * 2.0f, 
+                               SDL_WINDOW_SHOWN);
     if (window_ == nullptr) {
       std::cerr << "Window could not be created." << std::endl;
       std::cerr << "SDL Error: " << SDL_GetError() << std::endl;
@@ -38,15 +42,21 @@ Renderer::~Renderer() {
 
 void Renderer::Render(Ball const &ball, std::vector<Player> const &players) {
   // draw the table
-  RenderTable();
+  RenderGameBoard(players);
   
   // draw the ball
   DrawBall(std::move(ball));
   
-  // render the players
-  for (auto const &player : players) {
-    RenderPlayer(player);
-  }
+  // update screen
+  SDL_RenderPresent(renderer_);
+}
+
+void Renderer::RenderCountPage(int count, std::vector<Player> const &players) {
+  // draw the table
+  RenderGameBoard(players);
+  
+  // draw count in center of screen
+  textHandler_->DrawCount(renderer_, count, center_);
   
   // update screen
   SDL_RenderPresent(renderer_);
@@ -60,6 +70,16 @@ void Renderer::PlayWallHitSound() const {
   audioHandler_->PlayWallHitSound();
 }
 
+void Renderer::RenderGameBoard(std::vector<Player> const &players) {
+  // draw the table
+  RenderTable();
+  
+  // render the players
+  for (auto const &player : players) {
+    RenderPlayer(player);
+  }
+}
+
 void Renderer::RenderTable() {
   // Set draw color to black and apply to whole screen
   SDL_SetRenderDrawColor(renderer_, 0x00, 0x00, 0x00, 0xFF);
@@ -70,9 +90,9 @@ void Renderer::RenderTable() {
   
   // loop from top to bottom of the screen
   // draw a white point in the center of the screen, skipping every third position
-  for (int y = 0; y < screen_height_; ++y) {
+  for (int y = 0; y < (center_.GetY() * 2.0f); ++y) {
     if (y % 3 != 0) {
-      SDL_RenderDrawPoint(renderer_, screen_width_ / 2, y);
+      SDL_RenderDrawPoint(renderer_, center_.GetX(), y);
     }
   }
 }

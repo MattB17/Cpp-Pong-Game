@@ -3,11 +3,21 @@
 #include <iostream>
 #include "SDL.h"
 
-void Controller::HandleInput(bool &running, std::vector<Player> &players) const {
+void Controller::CheckForQuit(bool &running) const {
   SDL_Event event;
-  // continuously poll to see if user has quit
   while (SDL_PollEvent(&event)) {
     if (event.type == SDL_QUIT) {
+      running = false;
+    }
+  }
+}
+
+void Controller::HandleInput(bool &running, std::vector<Player> &players) const {
+  SDL_Event event;
+  // continuously poll
+  while (SDL_PollEvent(&event)) {
+    if (event.type == SDL_QUIT) {
+      // set running to false if user quit
       running = false;
     } else if (event.type == SDL_KEYDOWN) {
       switch(event.key.keysym.sym) {
