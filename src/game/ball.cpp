@@ -2,24 +2,6 @@
 #include "constants.h"
 #include <iostream>
 
-void Ball::SetWidth(int width) {
-  try {
-    if (width <= 0) throw width;
-    width_ = width;
-  } catch (int e) {
-    std::cerr << "Ball width must be a positive integer. Value " << e << " given." << std::endl;
-  }
-}
-
-void Ball::SetHeight(int height) {
-  try {
-    if (height <= 0) throw height;
-    height_ = height;
-  } catch (int e) {
-    std::cerr << "Ball height must be a positive integer. Value " << e << " given." << std::endl;
-  }
-}
-
 void Ball::UpdatePosition(float elapsedTime) {
   pos_ += velocity_ * elapsedTime;
 }
@@ -31,9 +13,9 @@ void Ball::HandleObjectCollision(Contact const &contact) {
   
   // change y direction if object hits top or bottom of object
   if (contact.collisionType == CollisionType::kTop) {
-    velocity_.SetY(-0.75f * kBallSpeed);
+    velocity_.SetY(-0.75f * speed_);
   } else if (contact.collisionType == CollisionType::kBottom) {
-    velocity_.SetY(0.75f * kBallSpeed);
+    velocity_.SetY(0.75f * speed_);
   }
 }
 
@@ -47,21 +29,17 @@ void Ball::HandleWallCollision(Contact const &contact) {
   } else if (contact.collisionType == CollisionType::kLeft) {
     // if hit left, move to origin and send left
     pos_ = Vec2D(kScreenWidth / 2.0f, kScreenHeight / 2.0f);
-    velocity_ = Vec2D(kBallSpeed, 0.25f * kBallSpeed);
+    velocity_ = Vec2D(speed_, 0.25f * speed_);
   } else if (contact.collisionType == CollisionType::kRight) {
     // if hit right, move to origin and send right
     pos_ = Vec2D(kScreenWidth / 2.0f, kScreenHeight / 2.0f);
-    velocity_ = Vec2D(-kBallSpeed, 0.25f * kBallSpeed);
+    velocity_ = Vec2D(-speed_, 0.25f * speed_);
   }
 }
     
-        
-
-Ball::Ball(Vec2D position, Vec2D velocity, int width, int height) 
-  : pos_(position), velocity_(velocity) {
-  SetWidth(width);
-  SetHeight(height);
+Ball::Ball(Vec2D position, Vec2D velocity, float speed, int width, int height) 
+  : pos_(position), velocity_(velocity), speed_(speed), GameObject(width, height) {
 }
 
-Ball::Ball(Vec2D position, Vec2D velocity)
-  : pos_(position), velocity_(velocity), width_(1), height_(1) {}
+Ball::Ball(Vec2D position, Vec2D velocity, float speed)
+  : pos_(position), velocity_(velocity), speed_(speed), GameObject() {}

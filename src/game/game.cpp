@@ -17,6 +17,7 @@ Game::Game() {
   // initialize ball and transfer ownership of initialPos
   ball_ = std::make_unique<Ball>(std::move(initialPos),
                                  Vec2D(kBallSpeed, 0.0f), 
+                                 kBallSpeed,
                                  kBallWidth, 
                                  kBallHeight);
   

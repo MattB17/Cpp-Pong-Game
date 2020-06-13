@@ -29,6 +29,7 @@ add_executable(
     src/control/controller.cpp
     
     src/game/game.cpp
+    src/game/game_object.cpp
     src/game/ball.cpp 
     src/game/paddle.cpp 
     src/game/player.cpp
