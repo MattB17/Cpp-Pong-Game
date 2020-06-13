@@ -11,9 +11,10 @@ class Player {
     Player(std::string name, 
            std::unique_ptr<Paddle> paddle, 
            std::unique_ptr<const Vec2D> scoreDisplayPos);
+    Player(std::string name, float paddle_x, float paddle_y, float score_x);
   
     std::string GetName() const { return name_; }
-    Paddle &GetPaddle() const { return *paddle_; }
+    const Paddle &GetPaddle() const { return *paddle_; }
     const Vec2D &GetScoreDisplayPos() const { return *scoreDisplayPos_; }
     int GetScore() { return score_; }
     

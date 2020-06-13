@@ -8,8 +8,8 @@ class GameObject {
     GameObject();
     GameObject(int width, int height);
   
-    int GetWidth() { return width_; }
-    int GetHeight() { return height_; }
+    int GetWidth() const { return width_; }
+    int GetHeight() const { return height_; }
     void SetWidth(int width);
     void SetHeight(int height);
   

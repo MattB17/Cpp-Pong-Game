@@ -3,19 +3,19 @@
 #include <iostream>
 
 void Ball::UpdatePosition(float elapsedTime) {
-  pos_ += velocity_ * elapsedTime;
+  *pos_ += *velocity_ * elapsedTime;
 }
 
 void Ball::HandleObjectCollision(Contact const &contact) {
   // move the ball to the edge of the object and reverse x direction
-  pos_.SetX(pos_.GetX() + contact.penetration);
-  velocity_.SetX(-velocity_.GetX());
+  pos_->SetX(pos_->GetX() + contact.penetration);
+  velocity_->SetX(-velocity_->GetX());
   
   // change y direction if object hits top or bottom of object
   if (contact.collisionType == CollisionType::kTop) {
-    velocity_.SetY(-0.75f * speed_);
+    velocity_->SetY(-0.75f * speed_);
   } else if (contact.collisionType == CollisionType::kBottom) {
-    velocity_.SetY(0.75f * speed_);
+    velocity_->SetY(0.75f * speed_);
   }
 }
 
@@ -24,22 +24,30 @@ void Ball::HandleWallCollision(Contact const &contact) {
       (contact.collisionType == CollisionType::kBottom)) {
     // if ball hit top or bottom, move to edge of the wall
     // then send in the opposite y direction
-    pos_.SetY(pos_.GetY() + contact.penetration);
-    velocity_.SetY(-velocity_.GetY());
-  } else if (contact.collisionType == CollisionType::kLeft) {
-    // if hit left, move to origin and send left
-    pos_ = Vec2D(kScreenWidth / 2.0f, kScreenHeight / 2.0f);
-    velocity_ = Vec2D(speed_, 0.25f * speed_);
-  } else if (contact.collisionType == CollisionType::kRight) {
-    // if hit right, move to origin and send right
-    pos_ = Vec2D(kScreenWidth / 2.0f, kScreenHeight / 2.0f);
-    velocity_ = Vec2D(-speed_, 0.25f * speed_);
+    pos_->SetY(pos_->GetY() + contact.penetration);
+    velocity_->SetY(-velocity_->GetY());
+  } else if (contact.collisionType == CollisionType::kLeft ||
+             contact.collisionType == CollisionType::kRight) {
+    // if hit side, move to origin and move back towards that side
+    pos_->SetX(kScreenWidth / 2.0f);
+    pos_->SetY(kScreenHeight / 2.0f);
+    int direction = 1 - (2 * (contact.collisionType == CollisionType::kRight));
+    velocity_->SetX(direction * speed_);
+    velocity_->SetY(0.25f * speed_);
   }
 }
     
-Ball::Ball(Vec2D position, Vec2D velocity, float speed, int width, int height) 
-  : pos_(position), velocity_(velocity), speed_(speed), GameObject(width, height) {
+Ball::Ball(std::unique_ptr<Vec2D> position, 
+           std::unique_ptr<Vec2D> velocity, 
+           float speed, int width, int height) 
+  : speed_(speed), GameObject(width, height) {
+    pos_ = std::move(position);
+    velocity_ = std::move(velocity);
 }
 
-Ball::Ball(Vec2D position, Vec2D velocity, float speed)
-  : pos_(position), velocity_(velocity), speed_(speed), GameObject() {}
+Ball::Ball(std::unique_ptr<Vec2D> position, 
+           std::unique_ptr<Vec2D> velocity, float speed)
+  : speed_(speed), GameObject() {
+    pos_ = std::move(position);
+    velocity_ = std::move(velocity);
+}

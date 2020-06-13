@@ -11,5 +11,6 @@ constexpr int kPaddleWidth{10};
 constexpr int kPaddleHeight{100};
 constexpr float kPaddleSpeed{1.0f};
 constexpr float kBallSpeed{1.5f};
+constexpr float kScoreYPos{20.0f};
 
 #endif

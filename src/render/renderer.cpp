@@ -98,7 +98,7 @@ void Renderer::RenderTable() {
 }
   
 
-void Renderer::DrawBall(Ball ball) {
+void Renderer::DrawBall(Ball const &ball) {
   SDL_Rect rect{};
   
   rect.x = static_cast<int>(ball.GetPosition().GetX());
@@ -109,7 +109,7 @@ void Renderer::DrawBall(Ball ball) {
   SDL_RenderFillRect(renderer_, &rect);
 }
 
-void Renderer::DrawPaddle(Paddle paddle) {
+void Renderer::DrawPaddle(Paddle const &paddle) {
   SDL_Rect rect{};
   
   rect.x = static_cast<int>(paddle.GetPosition().GetX());

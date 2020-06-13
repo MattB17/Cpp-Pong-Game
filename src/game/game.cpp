@@ -10,34 +10,22 @@
 #include <algorithm>
 
 Game::Game() {
-  // initial position of ball
-  Vec2D initialPos = Vec2D((kScreenWidth - kBallWidth) / 2.0f, 
-                           (kScreenHeight - kBallHeight) / 2.0f);
-  
-  // initialize ball and transfer ownership of initialPos
-  ball_ = std::make_unique<Ball>(std::move(initialPos),
-                                 Vec2D(kBallSpeed, 0.0f), 
+  // initial ball
+  std::unique_ptr<Vec2D> ballPos = std::make_unique<Vec2D>((kScreenWidth - kBallWidth) / 2.0f, 
+                                                           (kScreenHeight - kBallHeight) / 2.0f);
+  std::unique_ptr<Vec2D> ballVelocity = std::make_unique<Vec2D>(kBallSpeed, 0.0f);
+  ball_ = std::make_unique<Ball>(std::move(ballPos),
+                                 std::move(ballVelocity), 
                                  kBallSpeed,
                                  kBallWidth, 
                                  kBallHeight);
   
   // create players
-  std::unique_ptr<Paddle> p1 = std::make_unique<Paddle>(Vec2D(50.0f, 
-                                                              (kScreenHeight - kPaddleHeight) / 2.0f),
-                                                        Vec2D(0.0f, 0.0f),
-                                                        kPaddleWidth, 
-                                                        kPaddleHeight);
-  std::unique_ptr<const Vec2D> scorePos1 = std::make_unique<const Vec2D>(kScreenWidth / 4, 20);
+  float centerY = (kScreenHeight - kPaddleHeight) / 2.0f;
   players_.emplace_back(
-    Player("Player1", std::move(p1), std::move(scorePos1)));
-  
-  std::unique_ptr<Paddle> p2 = std::make_unique<Paddle>(Vec2D(kScreenWidth - 50.0f, 
-                                                              (kScreenHeight - kPaddleHeight) / 2.0f),
-                                                        Vec2D(0.0f, 0.0f),
-                                                        kPaddleWidth, 
-                                                        kPaddleHeight);
-  std::unique_ptr<const Vec2D> scorePos2 = std::make_unique<const Vec2D>(3 * kScreenWidth / 4, 20);
-  players_.emplace_back(Player("Player2", std::move(p2), std::move(scorePos2)));
+    Player("Player1", 50.0f, centerY, kScreenWidth / 4.0f));
+  players_.emplace_back(
+    Player("Player2", kScreenWidth - 50.0f, centerY, 3 * kScreenWidth / 4.0f));
 }
 
 void Game::Run(Controller const &controller, Renderer &renderer) {
@@ -105,7 +93,7 @@ void Game::Update(float elapsedTime, Renderer const &renderer) {
   }
 }
 
-Contact Game::GetBallPaddleContact(Paddle &paddle) {
+Contact Game::GetBallPaddleContact(Paddle const &paddle) {
   // contact is initialized with CollisionType of kNone
   Contact contact{};
   

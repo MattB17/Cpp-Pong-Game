@@ -34,8 +34,8 @@ class Renderer {
     
     void RenderGameBoard(std::vector<Player> const &players);
     void RenderTable();
-    void DrawBall(Ball ball);
-    void DrawPaddle(Paddle paddle);
+    void DrawBall(Ball const &ball);
+    void DrawPaddle(Paddle const &paddle);
     void RenderPlayer(Player const &player);
 };
 
