@@ -8,6 +8,7 @@
 #include "renderer.h"
 #include "contact.h"
 #include <memory>
+#include <mutex>
 
 class Game {
   public:
@@ -19,7 +20,10 @@ class Game {
     std::unique_ptr<Player> user_;
     std::unique_ptr<Player> computerAI_;
   
+    std::mutex ballMtx_;
+  
     void Update(float elapsedTime, Renderer const &renderer);
+    void UpdateAI(float elapsedTime);
     void HandleBallPaddleContact(Contact const &contact, Renderer const &renderer);
   
     Contact GetBallPaddleContact(Paddle const &paddle);

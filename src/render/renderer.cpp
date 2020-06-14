@@ -17,17 +17,24 @@ Renderer::Renderer()
     // initialize an audio handler
     audioHandler_ = std::make_unique<AudioHandler>(runner_);
     
-    // initialize SDL_window and SDL_renderer
-    std::future<void> windowFtr = std::async([this] () {
-      this->InitializeWindow();
-    });
+    // initialize SDL_window
+    window_ = SDL_CreateWindow("Pong", 
+                               SDL_WINDOWPOS_CENTERED, 
+                               SDL_WINDOWPOS_CENTERED,
+                               center_.GetX() * 2.0f, 
+                               center_.GetY() * 2.0f, 
+                               SDL_WINDOW_SHOWN);
+    if (window_ == nullptr) {
+      std::cerr << "Window could not be created." << std::endl;
+      std::cerr << "SDL Error: " << SDL_GetError() << std::endl;
+    }
     
-    std::future<void> rendererFtr = std::async([this] () {
-      this->InitializeRenderer();
-    });
-    
-    windowFtr.wait();
-    rendererFtr.wait();
+    // initialize renderer
+    renderer_ = SDL_CreateRenderer(window_, -1, SDL_RENDERER_ACCELERATED);
+    if (renderer_ == nullptr) {
+      std::cerr << "Renderer could not be created." << std::endl;
+      std::cerr << "SDL Error: " << SDL_GetError() << std::endl;
+    }
 }
 
 Renderer::~Renderer() {
@@ -63,27 +70,6 @@ void Renderer::PlayObjectHitSound() const {
 
 void Renderer::PlayWallHitSound() const {
   audioHandler_->PlayWallHitSound();
-}
-
-void Renderer::InitializeWindow() {
-    window_ = SDL_CreateWindow("Pong", 
-                               SDL_WINDOWPOS_CENTERED, 
-                               SDL_WINDOWPOS_CENTERED,
-                               center_.GetX() * 2.0f, 
-                               center_.GetY() * 2.0f, 
-                               SDL_WINDOW_SHOWN);
-    if (window_ == nullptr) {
-      std::cerr << "Window could not be created." << std::endl;
-      std::cerr << "SDL Error: " << SDL_GetError() << std::endl;
-    }
-}
-
-void Renderer::InitializeRenderer() {
-  renderer_ = SDL_CreateRenderer(window_, -1, SDL_RENDERER_ACCELERATED);
-    if (renderer_ == nullptr) {
-      std::cerr << "Renderer could not be created." << std::endl;
-      std::cerr << "SDL Error: " << SDL_GetError() << std::endl;
-    }
 }
 
 void Renderer::RenderGameBoard(Player const &user, Player const &computerAI) {

@@ -32,9 +32,6 @@ class Renderer {
   
     // shared resource
     std::shared_ptr<SDL_Runner> runner_;
-  
-    void InitializeWindow();
-    void InitializeRenderer();
     
     void RenderGameBoard(Player const &user, Player const &computerAI);
     void RenderTable();

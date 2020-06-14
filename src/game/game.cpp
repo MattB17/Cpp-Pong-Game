@@ -63,8 +63,9 @@ void Game::Run(Controller const &controller, Renderer &renderer) {
     auto startTime = std::chrono::high_resolution_clock::now();
     
     // run input-update-render game loop
-    controller.HandleInput(running, *user_, *computerAI_);
+    controller.HandleInput(running, *user_);
     Update(elapsedTime, renderer);
+    std::cout << "Here\n";
     renderer.Render(*ball_, *user_, *computerAI_);
     
     auto stopTime = std::chrono::high_resolution_clock::now();
@@ -83,11 +84,12 @@ void Game::Update(float elapsedTime, Renderer const &renderer) {
   }));
   
   updateFtrs.emplace_back(std::async([this, elapsedTime] () {
-    this->computerAI_->UpdatePaddlePosition(elapsedTime);
+    this->UpdateAI(elapsedTime);
   }));
   
   // update ball position
   updateFtrs.emplace_back(std::async([this, elapsedTime] () {
+    std::lock_guard<std::mutex> ballLock(this->ballMtx_);
     this->ball_->UpdatePosition(elapsedTime);
   }));
   
@@ -123,6 +125,27 @@ void Game::Update(float elapsedTime, Renderer const &renderer) {
     }
   }
 }
+
+void Game::UpdateAI(float elapsedTime) {
+  // use a mutex to get the ball's position
+  std::unique_lock<std::mutex> ballLock(ballMtx_);
+  float ballY = ball_->GetPosition().GetY();
+  ballLock.unlock();
+  
+  float computerY = computerAI_->GetPaddle().GetPosition().GetY();
+  
+  // update velocity based on relative direction to ball
+  if (computerY - kPaddleHeight > ballY) {
+    computerAI_->UpdatePaddleVelocityY(-kPaddleSpeed);
+  } else if (computerY < ballY) {
+    computerAI_->UpdatePaddleVelocityY(kPaddleSpeed);
+  } else {
+    computerAI_->UpdatePaddleVelocityY(0.0f);
+  }
+  
+  computerAI_->UpdatePaddlePosition(elapsedTime);
+}
+    
 
 void Game::HandleBallPaddleContact(Contact const &contact, Renderer const &renderer) {
   std::future<void> contactFtr = std::async([this, &contact] () {
