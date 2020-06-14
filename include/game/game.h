@@ -20,7 +20,7 @@ class Game {
     std::unique_ptr<Player> computerAI_;
   
     void Update(float elapsedTime, Renderer const &renderer);
-    void HandleBallPaddleContact(Contact contact, Renderer const &renderer);
+    void HandleBallPaddleContact(Contact const &contact, Renderer const &renderer);
   
     Contact GetBallPaddleContact(Paddle const &paddle);
     Contact GetBallWallContact();

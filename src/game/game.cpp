@@ -3,8 +3,9 @@
 #include "vec2d.h"
 #include "constants.h"
 #include <iostream>
-#include <chrono>
+#include <vector>
 #include <thread>
+#include <future>
 #include <stdlib.h>
 #include <chrono>
 #include <algorithm>
@@ -20,18 +21,37 @@ Game::Game() {
                                  kBallWidth, 
                                  kBallHeight);
   
-  // create players
+  // create players using two threads
   float centerY = (kScreenHeight - kPaddleHeight) / 2.0f;
-  user_ = std::make_unique<Player>("User", 50.0f, centerY, kScreenWidth / 4.0f);
-  computerAI_ = std::make_unique<Player>("ComputerAI", kScreenWidth - 50.0f, centerY, 3 * kScreenWidth / 4.0f);
+  std::vector<std::future<void>> playerFtrs;
+  
+  playerFtrs.emplace_back(std::async([this, centerY] () {
+    this->user_ = std::make_unique<Player>("User", 50.0f, centerY, 3 * kScreenWidth / 4.0f);
+  }));
+  
+  playerFtrs.emplace_back(std::async([this, centerY] () {
+    this->computerAI_ = std::make_unique<Player>("ComputerAI", kScreenWidth - 50.0f, centerY, kScreenWidth / 4.0f);
+  }));
+  
+  for (auto &ftr : playerFtrs) {
+    ftr.wait();
+  }
 }
 
 void Game::Run(Controller const &controller, Renderer &renderer) {
   bool running = true;
   int count = 3;
   while (running && count > 0) {
-    controller.CheckForQuit(running);
-    renderer.RenderCountPage(count, *user_, *computerAI_);
+    std::future<void> controlFtr = std::async([&controller, &running] () {
+      controller.CheckForQuit(running);
+    });
+    
+    std::future<void> renderFtr = std::async([&renderer, count, this] () {
+      renderer.RenderCountPage(count, *(this->user_), *(this->computerAI_));
+    });
+    
+    controlFtr.wait();
+    renderFtr.wait();
     
     --count;
     
@@ -54,12 +74,26 @@ void Game::Run(Controller const &controller, Renderer &renderer) {
 
 void Game::Update(float elapsedTime, Renderer const &renderer) {
   
+  // use futures to update all objects in parallel
+  std::vector<std::future<void>> updateFtrs;
+  
   // update position of paddles
-  user_->UpdatePaddlePosition(elapsedTime);
-  computerAI_->UpdatePaddlePosition(elapsedTime);
+  updateFtrs.emplace_back(std::async([this, elapsedTime] () {
+    this->user_->UpdatePaddlePosition(elapsedTime);
+  }));
+  
+  updateFtrs.emplace_back(std::async([this, elapsedTime] () {
+    this->computerAI_->UpdatePaddlePosition(elapsedTime);
+  }));
   
   // update ball position
-  ball_->UpdatePosition(elapsedTime);
+  updateFtrs.emplace_back(std::async([this, elapsedTime] () {
+    this->ball_->UpdatePosition(elapsedTime);
+  }));
+  
+  for (auto &ftr : updateFtrs) {
+    ftr.wait();
+  }
   
   // check for collision with a paddle
   Contact contact = GetBallPaddleContact(user_->GetPaddle());
@@ -90,9 +124,17 @@ void Game::Update(float elapsedTime, Renderer const &renderer) {
   }
 }
 
-void Game::HandleBallPaddleContact(Contact contact, Renderer const &renderer) {
-  ball_->HandleObjectCollision(contact);
-  renderer.PlayObjectHitSound();
+void Game::HandleBallPaddleContact(Contact const &contact, Renderer const &renderer) {
+  std::future<void> contactFtr = std::async([this, &contact] () {
+    this->ball_->HandleObjectCollision(contact);
+  });
+  
+  std::future<void> renderFtr = std::async([&renderer] () {
+    renderer.PlayObjectHitSound();
+  });
+  
+  contactFtr.wait();
+  renderFtr.wait();
 }
 
 Contact Game::GetBallPaddleContact(Paddle const &paddle) {

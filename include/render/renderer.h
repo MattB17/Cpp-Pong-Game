@@ -23,14 +23,18 @@ class Renderer {
     void PlayWallHitSound() const;
   
   private:
+    // owned resources
     std::unique_ptr<TextHandler> textHandler_;
     std::unique_ptr<AudioHandler> audioHandler_;
-  
-    std::shared_ptr<SDL_Runner> runner_;
     SDL_Window *window_;
     SDL_Renderer *renderer_;
-  
     const Vec2D center_;
+  
+    // shared resource
+    std::shared_ptr<SDL_Runner> runner_;
+  
+    void InitializeWindow();
+    void InitializeRenderer();
     
     void RenderGameBoard(Player const &user, Player const &computerAI);
     void RenderTable();
