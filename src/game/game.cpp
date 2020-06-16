@@ -40,8 +40,14 @@ Game::Game() {
 
 void Game::Run(Controller const &controller, Renderer &renderer) {
   bool running = true;
+  Uint32 startTime;
+  Uint32 endTime;
+  
+  // the game starts by rendering a count down from count
   int count = 3;
   while (running && count > 0) {
+    startTime = SDL_GetTicks();
+    
     std::future<void> controlFtr = std::async([&controller, &running] () {
       controller.CheckForQuit(running);
     });
@@ -55,20 +61,27 @@ void Game::Run(Controller const &controller, Renderer &renderer) {
     
     --count;
     
-    std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+    endTime = SDL_GetTicks();
+    
+    if (endTime - startTime < kCountWaitTime) {
+      SDL_Delay(kCountWaitTime - endTime + startTime);
+    }
   }
   
   float elapsedTime = 0.0f;
   while(running) {
-    auto startTime = std::chrono::high_resolution_clock::now();
+    startTime = SDL_GetTicks();
     
     // run input-update-render game loop
     controller.HandleInput(running, *user_);
     Update(elapsedTime, renderer);
     renderer.Render(*ball_, *user_, *computerAI_);
     
-    auto stopTime = std::chrono::high_resolution_clock::now();
-    elapsedTime = std::chrono::duration<float, std::chrono::milliseconds::period>(stopTime - startTime).count();
+    endTime = SDL_GetTicks();
+    if (endTime - startTime < kMsPerFrame) {
+      SDL_Delay(kMsPerFrame - endTime + startTime);
+      elapsedTime = kMsPerFrame;
+    }
   }
 }
 
@@ -234,7 +247,7 @@ Contact Game::GetBallWallContact() {
   } else if (ballBottom >= kScreenHeight) {
     // hit bottom wall
     contact.collisionType = CollisionType::kBottom;
-    contact.penetration = ballBottom - kScreenHeight;
+    contact.penetration = kScreenHeight - ballBottom;
   }
   
   return contact;

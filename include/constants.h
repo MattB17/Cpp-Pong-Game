@@ -3,6 +3,9 @@
 
 #include <cstddef>
 
+constexpr std::size_t kFramesPerSecond{60};
+constexpr std::size_t kCountWaitTime{1000};
+constexpr std::size_t kMsPerFrame{1000 / kFramesPerSecond};
 constexpr std::size_t kScreenWidth{1280};
 constexpr std::size_t kScreenHeight{720};
 constexpr int kBallWidth{15};
