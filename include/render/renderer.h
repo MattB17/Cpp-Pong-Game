@@ -16,6 +16,12 @@ class Renderer {
   public:
     Renderer();
     ~Renderer();
+  
+    // no copying or moving renderers
+    Renderer(const Renderer& source) = delete;
+    Renderer& operator=(const Renderer& source) = delete;
+    Renderer(Renderer&& source) = delete;
+    Renderer& operator=(Renderer&& source) = delete;
     
     void Render(const Ball & ball, const Player& user, const Player& computerAI);
     void RenderCountPage(int count, const Player& user, const Player& computerAI);

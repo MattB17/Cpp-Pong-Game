@@ -12,6 +12,12 @@ class TextHandler {
   public:
     TextHandler(std::shared_ptr<SDL_Runner> runner);
     ~TextHandler();
+  
+    // no copying or moving text handlers
+    TextHandler(const TextHandler& source) = delete;
+    TextHandler& operator=(const TextHandler& source) = delete;
+    TextHandler(TextHandler&& source) = delete;
+    TextHandler& operator=(TextHandler&& source) = delete;
       
     void DrawPlayerScore(SDL_Renderer *renderer, const Player& player);
     void DrawCount(SDL_Renderer *renderer, int count, const Vec2D& position);
