@@ -10,6 +10,7 @@
 #include "player.h"
 #include <vector>
 #include <memory>
+#include <mutex>
 
 class Renderer {
   public:
@@ -32,6 +33,8 @@ class Renderer {
   
     // shared resource
     std::shared_ptr<SDL_Runner> runner_;
+  
+    std::mutex renderMtx_;
     
     void RenderGameBoard(Player const &user, Player const &computerAI);
     void RenderTable();

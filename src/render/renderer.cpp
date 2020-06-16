@@ -47,7 +47,7 @@ void Renderer::Render(Ball const &ball, Player const &user, Player const &comput
   RenderGameBoard(user, computerAI);
   
   // draw the ball
-  DrawBall(std::move(ball));
+  DrawBall(ball);
   
   // update screen
   SDL_RenderPresent(renderer_);
@@ -77,8 +77,15 @@ void Renderer::RenderGameBoard(Player const &user, Player const &computerAI) {
   RenderTable();
   
   // render the players
-  RenderPlayer(user);
-  RenderPlayer(computerAI);
+  std::future<void> userFtr = std::async([this, &user] () {
+    this->RenderPlayer(user);
+  });
+  std::future<void> computerFtr = std::async([this, &computerAI] () {
+    this->RenderPlayer(computerAI);
+  });
+  
+  userFtr.wait();
+  computerFtr.wait();
 }
 
 void Renderer::RenderTable() {
@@ -106,7 +113,8 @@ void Renderer::DrawBall(Ball const &ball) {
   rect.y = static_cast<int>(ball.GetPosition().GetY());
   rect.w = ball.GetWidth();
   rect.h = ball.GetHeight();
-
+  
+  std::lock_guard<std::mutex> renderLock(renderMtx_);
   SDL_RenderFillRect(renderer_, &rect);
 }
 
@@ -118,10 +126,13 @@ void Renderer::DrawPaddle(Paddle const &paddle) {
   rect.w = paddle.GetWidth();
   rect.h = paddle.GetHeight();
   
+  std::lock_guard<std::mutex> renderLock(renderMtx_);
   SDL_RenderFillRect(renderer_, &rect);
 }
 
 void Renderer::RenderPlayer(Player const &player) {
   DrawPaddle(player.GetPaddle());
+  
+  std::lock_guard<std::mutex> renderLock(renderMtx_);
   textHandler_->DrawPlayerScore(renderer_, player);
 }

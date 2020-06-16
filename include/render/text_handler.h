@@ -6,6 +6,7 @@
 #include "vec2d.h"
 #include <string>
 #include <memory>
+#include <mutex>
 
 class TextHandler {
   public:

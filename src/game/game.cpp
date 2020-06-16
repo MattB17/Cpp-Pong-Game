@@ -65,7 +65,6 @@ void Game::Run(Controller const &controller, Renderer &renderer) {
     // run input-update-render game loop
     controller.HandleInput(running, *user_);
     Update(elapsedTime, renderer);
-    std::cout << "Here\n";
     renderer.Render(*ball_, *user_, *computerAI_);
     
     auto stopTime = std::chrono::high_resolution_clock::now();
