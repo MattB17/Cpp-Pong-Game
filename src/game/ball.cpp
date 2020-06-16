@@ -2,10 +2,6 @@
 #include "constants.h"
 #include <iostream>
 
-void Ball::UpdatePosition(float elapsedTime) {
-  *pos_ += *velocity_ * elapsedTime;
-}
-
 void Ball::HandleObjectCollision(Contact const &contact) {
   // move the ball to the edge of the object and reverse x direction
   pos_->SetX(pos_->GetX() + contact.penetration);

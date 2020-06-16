@@ -25,3 +25,7 @@ void GameObject::SetHeight(int height) {
     std::cerr << "Height must be a positive integer. Value " << e << " given" << std::endl;
   }
 }
+
+void GameObject::UpdatePosition(float elapsedTime) {
+  *pos_ += *velocity_ * elapsedTime;
+}

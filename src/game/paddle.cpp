@@ -17,7 +17,7 @@ Paddle::Paddle(std::unique_ptr<Vec2D> position,
 }
 
 void Paddle::UpdatePosition(float elapsedTime) {
-  *pos_ += *velocity_ * elapsedTime;
+  GameObject::UpdatePosition(elapsedTime);
   if (pos_->GetY() < 0) {
     pos_->SetY(0);
   } else if (pos_->GetY() > (kScreenHeight - GetHeight())) {

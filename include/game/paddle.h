@@ -15,14 +15,8 @@ class Paddle : public GameObject {
            std::unique_ptr<Vec2D> velocity, 
            int width, int height);
   
-    const Vec2D &GetPosition() const { return *pos_; }
-    const Vec2D GetVelocity() const { return *velocity_; }
     void UpdatePosition(float elapsedTime);
     void UpdateVelocityY(float y);
-  
-  private:
-    std::unique_ptr<Vec2D> pos_;
-    std::unique_ptr<Vec2D> velocity_;
 };
 
 #endif
