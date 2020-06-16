@@ -38,7 +38,7 @@ Game::Game() {
   }
 }
 
-void Game::Run(Controller const &controller, Renderer &renderer) {
+void Game::Run(const Controller& controller, Renderer &renderer) {
   bool running = true;
   Uint32 startTime;
   Uint32 endTime;
@@ -85,7 +85,7 @@ void Game::Run(Controller const &controller, Renderer &renderer) {
   }
 }
 
-void Game::Update(float elapsedTime, Renderer const &renderer) {
+void Game::Update(float elapsedTime, const Renderer& renderer) {
   
   // use futures to update all objects in parallel
   std::vector<std::future<void>> updateFtrs;
@@ -159,7 +159,7 @@ void Game::UpdateAI(float elapsedTime) {
 }
     
 
-void Game::HandleBallPaddleContact(Contact const &contact, Renderer const &renderer) {
+void Game::HandleBallPaddleContact(const Contact& contact, const Renderer& renderer) {
   std::future<void> contactFtr = std::async([this, &contact] () {
     this->ball_->HandleObjectCollision(contact);
   });
@@ -172,7 +172,7 @@ void Game::HandleBallPaddleContact(Contact const &contact, Renderer const &rende
   renderFtr.wait();
 }
 
-Contact Game::GetBallPaddleContact(Paddle const &paddle) {
+Contact Game::GetBallPaddleContact(const Paddle& paddle) {
   // contact is initialized with CollisionType of kNone
   Contact contact{};
   

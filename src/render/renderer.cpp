@@ -42,7 +42,7 @@ Renderer::~Renderer() {
   SDL_DestroyRenderer(renderer_);
 }
 
-void Renderer::Render(Ball const &ball, Player const &user, Player const &computerAI) {
+void Renderer::Render(const Ball& ball, const Player& user, const Player& computerAI) {
   // draw the table
   RenderGameBoard(user, computerAI);
   
@@ -53,7 +53,7 @@ void Renderer::Render(Ball const &ball, Player const &user, Player const &comput
   SDL_RenderPresent(renderer_);
 }
 
-void Renderer::RenderCountPage(int count, Player const &user, Player const &computerAI) {
+void Renderer::RenderCountPage(int count, const Player& user, const Player& computerAI) {
   // draw the table
   RenderGameBoard(user, computerAI);
   
@@ -72,7 +72,7 @@ void Renderer::PlayWallHitSound() const {
   audioHandler_->PlayWallHitSound();
 }
 
-void Renderer::RenderGameBoard(Player const &user, Player const &computerAI) {
+void Renderer::RenderGameBoard(const Player& user, const Player& computerAI) {
   // draw the table
   RenderTable();
   
@@ -106,7 +106,7 @@ void Renderer::RenderTable() {
 }
   
 
-void Renderer::DrawBall(Ball const &ball) {
+void Renderer::DrawBall(const Ball& ball) {
   SDL_Rect rect{};
   
   rect.x = static_cast<int>(ball.GetPosition().GetX());
@@ -118,7 +118,7 @@ void Renderer::DrawBall(Ball const &ball) {
   SDL_RenderFillRect(renderer_, &rect);
 }
 
-void Renderer::DrawPaddle(Paddle const &paddle) {
+void Renderer::DrawPaddle(const Paddle& paddle) {
   SDL_Rect rect{};
   
   rect.x = static_cast<int>(paddle.GetPosition().GetX());
@@ -130,7 +130,7 @@ void Renderer::DrawPaddle(Paddle const &paddle) {
   SDL_RenderFillRect(renderer_, &rect);
 }
 
-void Renderer::RenderPlayer(Player const &player) {
+void Renderer::RenderPlayer(const Player& player) {
   DrawPaddle(player.GetPaddle());
   
   std::lock_guard<std::mutex> renderLock(renderMtx_);

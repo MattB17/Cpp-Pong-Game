@@ -9,6 +9,12 @@ class SDL_Runner {
   public:
     SDL_Runner();
     ~SDL_Runner();
+  
+    // cannot copy or move an SDL_Runner
+    SDL_Runner(const SDL_Runner& source) = delete;
+    SDL_Runner& operator=(const SDL_Runner& source) = delete;
+    SDL_Runner(SDL_Runner&& source) = delete;
+    SDL_Runner& operator=(SDL_Runner&& source) = delete;
 };
 
 #endif

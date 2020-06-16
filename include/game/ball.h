@@ -15,8 +15,8 @@ class Ball : public GameObject {
          std::unique_ptr<Vec2D> velocity, 
          float speed, int width, int height);
   
-    void HandleObjectCollision(Contact const &contact);
-    void HandleWallCollision(Contact const &contact);
+    void HandleObjectCollision(const Contact& contact);
+    void HandleWallCollision(const Contact& contact);
   
   private:
     float speed_;

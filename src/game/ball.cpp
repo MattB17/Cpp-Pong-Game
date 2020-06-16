@@ -2,7 +2,7 @@
 #include "constants.h"
 #include <iostream>
 
-void Ball::HandleObjectCollision(Contact const &contact) {
+void Ball::HandleObjectCollision(const Contact& contact) {
   // move the ball to the edge of the object and reverse x direction
   pos_->SetX(pos_->GetX() + contact.penetration);
   velocity_->SetX(-velocity_->GetX());
@@ -15,7 +15,7 @@ void Ball::HandleObjectCollision(Contact const &contact) {
   }
 }
 
-void Ball::HandleWallCollision(Contact const &contact) {
+void Ball::HandleWallCollision(const Contact& contact) {
   if ((contact.collisionType == CollisionType::kTop) || 
       (contact.collisionType == CollisionType::kBottom)) {
     // if ball hit top or bottom, move to edge of the wall

@@ -13,8 +13,8 @@ class TextHandler {
     TextHandler(std::shared_ptr<SDL_Runner> runner);
     ~TextHandler();
       
-    void DrawPlayerScore(SDL_Renderer *renderer, Player const &player);
-    void DrawCount(SDL_Renderer *renderer, int count, Vec2D const &position);
+    void DrawPlayerScore(SDL_Renderer *renderer, const Player& player);
+    void DrawCount(SDL_Renderer *renderer, int count, const Vec2D& position);
   
   private:
     std::shared_ptr<SDL_Runner> runner_;
@@ -24,7 +24,7 @@ class TextHandler {
     SDL_Surface *surface_{};
     SDL_Texture *texture_{};
   
-    void DrawText(SDL_Renderer *renderer, Vec2D const &position);
+    void DrawText(SDL_Renderer *renderer, const Vec2D& position);
 };
 
 #endif

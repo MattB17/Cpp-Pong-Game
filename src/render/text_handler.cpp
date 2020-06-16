@@ -24,14 +24,14 @@ TextHandler::~TextHandler() {
   TTF_Quit();
 }
 
-void TextHandler::DrawPlayerScore(SDL_Renderer *renderer, Player const &player) {
+void TextHandler::DrawPlayerScore(SDL_Renderer *renderer, const Player& player) {
   surface_ = TTF_RenderText_Solid(scoreFont_,
                                   player.GetScoreString().c_str(),
                                   {0xFF, 0xFF, 0xFF, 0xFF});
   DrawText(renderer, player.GetScoreDisplayPos());
 }
 
-void TextHandler::DrawCount(SDL_Renderer *renderer, int count, Vec2D const &position) {
+void TextHandler::DrawCount(SDL_Renderer *renderer, int count, const Vec2D& position) {
   surface_ = TTF_RenderText_Solid(countFont_,
                                   std::to_string(count).c_str(),
                                   {0xFF, 0xFF, 0xFF, 0xFF});
@@ -39,7 +39,7 @@ void TextHandler::DrawCount(SDL_Renderer *renderer, int count, Vec2D const &posi
 }
   
 
-void TextHandler::DrawText(SDL_Renderer *renderer, Vec2D const &position) {
+void TextHandler::DrawText(SDL_Renderer *renderer, const Vec2D& position) {
   texture_ = SDL_CreateTextureFromSurface(renderer, surface_);
   
   // get the width and height of the text

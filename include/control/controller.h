@@ -8,6 +8,14 @@
 class Controller {
   public:
     Controller() {};
+    ~Controller() {};
+  
+    // cannot copy or move a controller
+    Controller(const Controller& source) = delete;
+    Controller& operator=(const Controller& source) = delete;
+    Controller(Controller&& source) = delete;
+    Controller& operator=(const Controller&& source) = delete;
+  
     void CheckForQuit(bool &running) const;
     void HandleInput(bool &running, Player &user) const;
   

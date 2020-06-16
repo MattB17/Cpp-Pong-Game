@@ -13,7 +13,15 @@
 class Game {
   public:
     Game();
-    void Run(Controller const &controller, Renderer &renderer);
+    ~Game() {}
+  
+    // cannot copy or move a game
+    Game(const Game& source) = delete;
+    Game& operator=(const Game& source) = delete;
+    Game(Game&& source) = delete;
+    Game& operator=(Game&& source) = delete;
+  
+    void Run(const Controller& controller, Renderer &renderer);
   
   private:
     std::unique_ptr<Ball> ball_;
@@ -22,11 +30,11 @@ class Game {
   
     std::mutex ballMtx_;
   
-    void Update(float elapsedTime, Renderer const &renderer);
+    void Update(float elapsedTime, const Renderer& renderer);
     void UpdateAI(float elapsedTime);
-    void HandleBallPaddleContact(Contact const &contact, Renderer const &renderer);
+    void HandleBallPaddleContact(const Contact& contact, const Renderer& renderer);
   
-    Contact GetBallPaddleContact(Paddle const &paddle);
+    Contact GetBallPaddleContact(const Paddle& paddle);
     Contact GetBallWallContact();
 };
 

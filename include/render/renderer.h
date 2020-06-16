@@ -17,8 +17,8 @@ class Renderer {
     Renderer();
     ~Renderer();
     
-    void Render(Ball const &ball, Player const &user, Player const &computerAI);
-    void RenderCountPage(int count, Player const &user, Player const &computerAI);
+    void Render(const Ball & ball, const Player& user, const Player& computerAI);
+    void RenderCountPage(int count, const Player& user, const Player& computerAI);
     
     void PlayObjectHitSound() const;
     void PlayWallHitSound() const;
@@ -36,11 +36,11 @@ class Renderer {
   
     std::mutex renderMtx_;
     
-    void RenderGameBoard(Player const &user, Player const &computerAI);
+    void RenderGameBoard(const Player& user, const Player& computerAI);
     void RenderTable();
-    void DrawBall(Ball const &ball);
-    void DrawPaddle(Paddle const &paddle);
-    void RenderPlayer(Player const &player);
+    void DrawBall(const Ball& ball);
+    void DrawPaddle(const Paddle& paddle);
+    void RenderPlayer(const Player& player);
 };
 
 #endif
