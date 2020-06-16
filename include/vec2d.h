@@ -11,8 +11,10 @@ class Vec2D {
     float GetY() const { return y_; }
     void SetY(float y) { y_ = y; }
   
-    Vec2D operator+(Vec2D const &other);
-    Vec2D& operator+=(Vec2D const &other);
+    bool operator==(const Vec2D& other);
+    bool operator!=(const Vec2D& other);
+    Vec2D operator+(const Vec2D& other);
+    Vec2D& operator+=(const Vec2D& other);
     Vec2D operator*(float scalar);
   
   private:

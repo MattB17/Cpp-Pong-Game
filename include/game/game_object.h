@@ -9,6 +9,14 @@ class GameObject {
     GameObject();
     GameObject(int width, int height);
   
+    GameObject(const GameObject& source);
+    GameObject& operator=(const GameObject& source);
+    GameObject(GameObject&& source);
+    GameObject& operator=(GameObject&& source);
+  
+    bool operator==(const GameObject& other);
+    bool operator!=(const GameObject& other);
+  
     int GetWidth() const { return width_; }
     int GetHeight() const { return height_; }
     void SetWidth(int width);

@@ -8,6 +8,64 @@ GameObject::GameObject(int width, int height) {
     SetHeight(height);
 }
 
+GameObject::GameObject(const GameObject& source) {
+  *pos_ = *(source.pos_);
+  *velocity_ = *(source.velocity_);
+  width_ = source.width_;
+  height_ = source.height_;
+}
+
+GameObject& GameObject::operator=(const GameObject& source) {
+  if (*this != source) {
+    *pos_ = *(source.pos_);
+    *velocity_ = *(source.velocity_);
+    width_ = source.width_;
+    height_ = source.height_;
+  }
+  return *this;
+}
+
+GameObject::GameObject(GameObject&& source) {
+  pos_ = std::move(source.pos_);
+  velocity_ = std::move(source.velocity_);
+  width_ = source.width_;
+  height_ = source.height_;
+  
+  source.pos_ = nullptr;
+  source.velocity_ = nullptr;
+  width_ = 0;
+  height_ = 0;
+}
+
+GameObject& GameObject::operator=(GameObject&& source) {
+  if (*this != source) {
+    pos_ = std::move(source.pos_);
+    velocity_ = std::move(source.velocity_);
+    width_ = source.width_;
+    height_ = source.height_;
+    
+    source.pos_ = nullptr;
+    source.velocity_ = nullptr;
+    width_ = 0;
+    height_ = 0;
+  }
+  return *this;
+}
+
+bool GameObject::operator==(const GameObject& other) {
+  return ((*pos_ == *(other.pos_)) &&
+          (*velocity_ == *(other.velocity_)) &&
+          (width_ == other.width_) &&
+          (height_ == other.height_));
+}
+
+bool GameObject::operator!=(const GameObject& other) {
+  return ((*pos_ != *(other.pos_)) ||
+          (*velocity_ != *(other.velocity_)) ||
+          (width_ != other.width_) ||
+          (height_ != other.height_));
+}
+
 void GameObject::SetWidth(int width) {
   try {
     if (width <= 0) throw width;
