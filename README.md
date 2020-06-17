@@ -1,5 +1,7 @@
 # CPP: Capstone Pong Game Project
 
+![Pong Board](https://raw.github.com/MattB17/Cpp-Pong-Game/master/images/pong_game.png)
+
 This is a repo for the Capstone project in the [Udacity C++ Nanodegree Program](https://www.udacity.com/course/c-plus-plus-nanodegree--nd213).
 
 The Capstone project is meant to illustrate the concepts of object-oriented programming, memory management, and concurrency in the `C++` programming language.
