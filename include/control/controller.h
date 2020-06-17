@@ -3,11 +3,13 @@
 
 #include "player.h"
 #include "paddle.h"
+#include "SDL_runner.h"
 #include <vector>
+#include <memory>
 
 class Controller {
   public:
-    Controller() {};
+    Controller(std::shared_ptr<SDL_Runner> runner);
     ~Controller() {};
   
     // cannot copy or move a controller
@@ -20,6 +22,8 @@ class Controller {
     void HandleInput(bool &running, Player &user) const;
   
   private:
+    std::shared_ptr<SDL_Runner> runner_;
+  
     void ChangePaddleDirection(Player &player, Paddle::Direction input) const;
 };
 

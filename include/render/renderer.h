@@ -14,7 +14,7 @@
 
 class Renderer {
   public:
-    Renderer();
+    Renderer(std::shared_ptr<SDL_Runner> runner);
     ~Renderer();
   
     // no copying or moving renderers

@@ -6,10 +6,10 @@
 #include <string>
 #include <stdlib.h>
 
-Renderer::Renderer() 
+Renderer::Renderer(std::shared_ptr<SDL_Runner> runner) 
   : center_(Vec2D(kScreenWidth / 2.0f, kScreenHeight / 2.0f)) {
     // Run SDL
-    runner_ = std::make_shared<SDL_Runner>();
+    runner_ = std::move(runner);
     
     // initialize a text handler
     textHandler_ = std::make_unique<TextHandler>(runner_);

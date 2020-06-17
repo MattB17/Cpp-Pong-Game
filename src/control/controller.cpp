@@ -3,6 +3,10 @@
 #include <iostream>
 #include "SDL.h"
 
+Controller::Controller(std::shared_ptr<SDL_Runner> runner) {
+  runner_ = std::move(runner);
+}
+
 void Controller::CheckForQuit(bool &running) const {
   SDL_Event event;
   while (SDL_PollEvent(&event)) {

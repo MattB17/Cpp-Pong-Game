@@ -25,6 +25,7 @@ add_executable(
     
     src/main.cpp
     src/vec2d.cpp
+    src/SDL_runner.cpp
     
     src/control/controller.cpp
     
@@ -35,7 +36,6 @@ add_executable(
     src/game/player.cpp
     
     src/render/renderer.cpp
-    src/render/SDL_runner.cpp
     src/render/text_handler.cpp
     src/render/audio_handler.cpp)
 
