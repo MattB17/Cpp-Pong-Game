@@ -8,6 +8,7 @@ class GameObject {
   public:
     GameObject();
     GameObject(int width, int height);
+    ~GameObject() {}
   
     GameObject(const GameObject& source);
     GameObject& operator=(const GameObject& source);
